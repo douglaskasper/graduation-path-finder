@@ -1,0 +1,52 @@
+﻿@model GPF.ViewModels.CourseListViewModel
+
+<div class="well">
+
+    <h5>Courses</h5>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Department</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Units</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Courses != null)
+            {
+                foreach (var course in Model.Courses)
+                {
+                <tr>
+                    <td>
+                        @course.Id
+                    </td>
+                    <td>
+                        @course.Department
+                    </td>
+                    <td>
+                        @course.Title
+                    </td>
+                    <td>
+                        @course.Description
+                    </td>
+                    <td>
+                        @course.Units
+                    </td>
+                </tr>
+                }
+            }
+            else
+            {
+            <tr>
+                <td>
+                    No courses found.
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

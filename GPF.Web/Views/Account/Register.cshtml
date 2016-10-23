@@ -1,0 +1,45 @@
+﻿@model GPF.Domain.Models.Account
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true, "Registration failed.", new { @class = "bs-callout bs-callout-danger" })
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="well">
+
+                <div class="form-group">
+                    <label for="username" class="control-label">Username</label>
+                    @Html.TextBoxFor(model => model.Username, new { @name = "username", @class = "form-control", @placeholder = "Email address" })
+                    @Html.ValidationMessageFor(model => model.Username)
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="control-label">Password</label>
+                    @Html.PasswordFor(model => model.Password, new { @name = "password", @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    <label for="first-name" class="control-label">First Name</label>
+                    @Html.TextBoxFor(model => model.FirstName, new { @name = "first-name", @class = "form-control", @placeholder = "First name" })
+                </div>
+
+                <div class="form-group">
+                    <label for="last-name" class="control-label">Last Name</label>
+                    @Html.TextBoxFor(model => model.LastName, new { @name = "last-name", @class = "form-control", @placeholder = "Last name" })
+                </div>
+
+                <button type="submit" class="btn btn-success btn-block">Register</button>
+
+            </div>
+        </div>
+    </div>
+}

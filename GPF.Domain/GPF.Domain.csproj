@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1EDA1EE2-CCDF-4795-BA15-182326DBDE64}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GPF.Domain</RootNamespace>
+    <AssemblyName>GPF.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Contracts\IServices\IAccountService.cs" />
+    <Compile Include="Contracts\IServices\IClassOfferingService.cs" />
+    <Compile Include="Contracts\IServices\ICourseService.cs" />
+    <Compile Include="Contracts\IServices\IDegreeService.cs" />
+    <Compile Include="Contracts\IServices\IGPFService.cs" />
+    <Compile Include="Models\AcademicTerm.cs" />
+    <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\AccountRole.cs" />
+    <Compile Include="Models\Building.cs" />
+    <Compile Include="Models\Campus.cs" />
+    <Compile Include="Models\ClassDay.cs" />
+    <Compile Include="Models\ClassDelivery.cs" />
+    <Compile Include="Models\ClassOffering.cs" />
+    <Compile Include="Models\Classroom.cs" />
+    <Compile Include="Models\ClassStatus.cs" />
+    <Compile Include="Models\Concentration.cs" />
+    <Compile Include="Models\Course.cs" />
+    <Compile Include="Models\Degree.cs" />
+    <Compile Include="Models\GPFSession.cs" />
+    <Compile Include="Models\Quarter.cs" />
+    <Compile Include="Models\ValueDescription.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AccountService.cs" />
+    <Compile Include="Services\ClassOfferingService.cs" />
+    <Compile Include="Services\CourseService.cs" />
+    <Compile Include="Services\DegreeService.cs" />
+    <Compile Include="Services\GPFService.cs" />
+    <Compile Include="Services\pseudo\Services.cs" />
+    <Compile Include="Services\Sandbox\AccountService.cs" />
+    <Compile Include="Services\Sandbox\ClassOfferingService.cs" />
+    <Compile Include="Services\Sandbox\CourseService.cs" />
+    <Compile Include="Services\Sandbox\DegreeService.cs" />
+    <Compile Include="Services\Sandbox\GPFService.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

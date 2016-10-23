@@ -1,0 +1,30 @@
+﻿<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("DePaul University", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("Profile", "Edit", "Account")</li>
+                <li>@Html.ActionLink("Search Degrees/Classes", "Index", "Home")</li>
+                
+                @if (!Request.IsAuthenticated)
+                {
+                    <li>@Html.ActionLink("Login", "Login", "Account")</li>
+                    <li>@Html.ActionLink("Register", "Register", "Account")</li>
+                }
+                else
+                {
+                    <li><strong>@Html.Encode(User.Identity.Name)</strong>, @Html.ActionLink("Logout", "Logout", "Account")</li>
+                }
+
+            </ul>
+        </div>
+    </div>
+</nav>
