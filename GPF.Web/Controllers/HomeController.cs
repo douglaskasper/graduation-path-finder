@@ -20,15 +20,5 @@ namespace GPF.Web.Controllers
             courseListViewModel.Courses = _service.GetCourses();
             return View(courseListViewModel);
         }
-
-        public ActionResult About()
-        {
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            return View();
-        }
     }
 }

@@ -9,10 +9,12 @@ namespace GPF.Web.Controllers
     public class CatalogController : Controller
     {
         IDegreeService _degreeService;
-        
-        public CatalogController(IDegreeService degreeService)
+        ICourseService _courseService;
+
+        public CatalogController(IDegreeService degreeService, ICourseService courseService)
         {
             _degreeService = degreeService;
+            _courseService = courseService;
         }
 
         public ActionResult Index()
@@ -27,7 +29,7 @@ namespace GPF.Web.Controllers
                     Search selections filter list w/ js?
             */
             List<Degree> degrees = _degreeService.GetDegrees();
-            DegreeListViewModel model = new DegreeListViewModel
+            DegreeListViewModel model = new DegreeListViewModel()
             {
                 Degrees = degrees
             };
@@ -40,7 +42,12 @@ namespace GPF.Web.Controllers
                 TODO: Display full list of courses, search options on top.
                     Search selections filter list w/ js?
             */
-            return View();
+            List<Course> courses = _courseService.GetCourses();
+            CourseListViewModel model = new CourseListViewModel()
+            {
+                Courses = courses
+            };
+            return View(model);
         }
 
         public ActionResult DegreeDetails()

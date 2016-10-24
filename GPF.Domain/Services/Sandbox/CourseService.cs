@@ -26,8 +26,8 @@ namespace GPF.Domain.Services.Sandbox
             course.Active = true;
             course.Prerequisites = new List<Course>
             {
-                new Course { Id = 1 },
-                new Course { Id = 2 }
+                new Course { Id = 1, Title = "Prereq1" },
+                new Course { Id = 2, Title = "Prereq2" }
             };
 
             courses.Add(course);
@@ -42,8 +42,8 @@ namespace GPF.Domain.Services.Sandbox
             course.Active = true;
             course.Prerequisites = new List<Course>
             {
-                new Course { Id = 3 },
-                new Course { Id = 4 }
+                new Course { Id = 3, Title = "Prereq3" },
+                new Course { Id = 4, Title = "Prereq4" }
             };
 
             courses.Add(course);
