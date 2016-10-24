@@ -152,6 +152,7 @@
     <Compile Include="ViewModels\CourseListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Lib\Encryption\SHA1.cs" />
+    <Compile Include="ViewModels\DegreeListViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -197,10 +198,13 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\ClassHistory.cshtml" />
+    <Content Include="Views\Catalog\Degrees.cshtml" />
+    <Content Include="Views\Catalog\_DegreeDetails.cshtml" />
+    <Content Include="Views\Catalog\Courses.cshtml" />
+    <Content Include="Views\Catalog\_CourseDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Catalog\" />
     <Folder Include="Views\GPF\" />
   </ItemGroup>
   <ItemGroup>

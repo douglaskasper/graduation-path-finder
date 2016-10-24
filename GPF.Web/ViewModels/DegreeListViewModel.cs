@@ -3,8 +3,8 @@ using GPF.Domain.Models;
 
 namespace GPF.Web.ViewModels
 {
-    public class CourseListViewModel
+    public class DegreeListViewModel
     {
-        public List<Course> Courses { get; set; }
+        public List<Degree> Degrees { get; set; }
     }
 }

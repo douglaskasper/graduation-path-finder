@@ -1,9 +1,9 @@
 ﻿using System.Web.Mvc;
 using GPF.Domain.Contracts.IServices;
 using GPF.Domain.Models;
-using GPF.ViewModels;
+using GPF.Web.ViewModels;
 
-namespace GPF.Controllers
+namespace GPF.Web.Controllers
 {
     public class HomeController : Controller
     {

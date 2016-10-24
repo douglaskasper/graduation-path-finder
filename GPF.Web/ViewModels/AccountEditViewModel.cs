@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GPF.Domain.Models;
 
-namespace GPF.ViewModels
+namespace GPF.Web.ViewModels
 {
     public class AccountEditViewModel
     {

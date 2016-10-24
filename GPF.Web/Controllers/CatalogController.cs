@@ -1,26 +1,40 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using GPF.Domain.Contracts.IServices;
 using GPF.Domain.Models;
+using GPF.Web.ViewModels;
 
-namespace GPF.Controllers
+namespace GPF.Web.Controllers
 {
     public class CatalogController : Controller
     {
+        IDegreeService _degreeService;
+        
+        public CatalogController(IDegreeService degreeService)
+        {
+            _degreeService = degreeService;
+        }
+
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult DegreeBrowser()
+        public ActionResult Degrees()
         {
             /*
                 TODO: Display full list of degrees, search options on top.
                     Search selections filter list w/ js?
             */
-            return View();
+            List<Degree> degrees = _degreeService.GetDegrees();
+            DegreeListViewModel model = new DegreeListViewModel
+            {
+                Degrees = degrees
+            };
+            return View(model);
         }
 
-        public ActionResult CourseBrowser()
+        public ActionResult Courses()
         {
             /*
                 TODO: Display full list of courses, search options on top.

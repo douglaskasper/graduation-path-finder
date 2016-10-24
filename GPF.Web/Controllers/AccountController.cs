@@ -3,9 +3,9 @@ using System.Web.Mvc;
 using System.Web.Security;
 using GPF.Domain.Contracts.IServices;
 using GPF.Domain.Models;
-using GPF.ViewModels;
+using GPF.Web.ViewModels;
 
-namespace GPF.Controllers
+namespace GPF.Web.Controllers
 {
     public class AccountController : Controller
     {
@@ -37,7 +37,7 @@ namespace GPF.Controllers
                 if (_accountService.Login(account))
                 {
                     FormsAuthentication.SetAuthCookie(account.Username, account.RememberMe);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Edit", "Account");
                 }
                 else
                 {

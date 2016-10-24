@@ -2,7 +2,7 @@
 using GPF.Domain.Contracts.IServices;
 using GPF.Domain.Models;
 
-namespace GPF.Controllers
+namespace GPF.Web.Controllers
 {
     public class GPFController : Controller
     {
