@@ -16,6 +16,8 @@ namespace GPF
             container.RegisterType<IAccountService, AccountService>();
             container.RegisterType<ICourseService, CourseService>();
             container.RegisterType<IDegreeService, DegreeService>();
+            container.RegisterType<IClassOfferingService, ClassOfferingService>();
+            container.RegisterType<IGPFService, GPFService>();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }

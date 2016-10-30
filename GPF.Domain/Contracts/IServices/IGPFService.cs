@@ -9,5 +9,6 @@ namespace GPF.Domain.Contracts.IServices
         GPFSession GetSessionById(GPFSession session);
         List<GPFSession> GetSessions();
         List<GPFSession> GetSessionsByAccountId(Account account);
+        GPFSchedule GetSessionSchedule(GPFSession session);
     }
 }

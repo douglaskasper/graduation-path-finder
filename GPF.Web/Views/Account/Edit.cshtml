@@ -1,12 +1,40 @@
-﻿@model GPF.Web.ViewModels.AccountEditViewModel
+﻿@model GPF.Web.ViewModels.AccountViewModel
 
 @{
     ViewBag.Title = "Edit Account";
 }
 
 <div class="page-header">
-    <h1>@Model.Account.FirstName @Model.Account.LastName, @Model.Account.Role.Description</h1>
+    <h2>@Model.Account.FirstName @Model.Account.LastName, @Model.Account.Role.Description</h2>
 </div>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-account" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Account", "Edit", "Account", new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div id="navbar-account" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("Edit", "Edit", "Account")</li>
+                <li>@Html.ActionLink("Class History", "ClassHistory", "Account")</li>
+                @if (Model.Account.Role.Value == "F".ToString() || Model.Account.Role.Value == "A".ToString())
+                {
+                    <li>@Html.ActionLink("Students", "Students", "Account")</li>
+                }
+                @if (Model.Account.Role.Value == "A".ToString())
+                {
+                    <li>@Html.ActionLink("Data", "Data", "Account")</li>
+                }
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
 
 @using (Html.BeginForm())
 {
@@ -17,6 +45,16 @@
             <h3 class="panel-title">Edit @Model.Account.Role.Description Account</h3>
         </div>
         <div class="panel-body">
+
+            @if (Model.Impersonating)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <p>
+                        <strong>Impersonating Account</strong> @GPF.Web.Lib.Statics.ImpersonateGet(Session).Id
+                        @Html.ActionLink("Stop Impersonation", "ImpersonateStop", "Account")
+                    </p>
+                </div>
+            }
 
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.Account.Id)
@@ -39,25 +77,12 @@
 
             <div class="form-group">
                 <label>Degree</label>
-                <select id="Degree" class="form-control" onchange="FillConcentrationList()">
-                    @foreach (var degree in Model.AvailableDegrees)
-                    {
-                        <option value="@degree.Id" @(Model.Account.Degree.Id == degree.Id ? "selected" : "")>@degree.Title</option>
-                    }
-                </select>
+                @Html.DropDownListFor(model => model.Account.Degree.Id, new SelectList(Model.AvailableDegrees, "Id", "Title", Model.Account.Degree.Id), new { @id = "select-degree", @class = "form-control", @onchange = "DegreeSelected()" })
             </div>
 
             <div class="form-group">
                 <label>Concentration</label>
-                <select id="Concentration" class="form-control">
-                    @if (Model.Account.Degree != null)
-                    {
-                        foreach (var concentration in Model.AvailableDegrees.Find(x => x.Id == Model.Account.Degree.Id).Concentrations)
-                        {
-                            <option value="@concentration.Id" @(Model.Account.Concentration.Id == concentration.Id ? "selected" : "")>@concentration.Title</option>
-                        }
-                    }
-                </select>
+                @Html.DropDownListFor(model => model.Account.Concentration.Id, new SelectList(Model.AvailableDegrees.Find(x => x.Id == Model.Account.Degree.Id).Concentrations, "Id", "Title", Model.Account.Concentration.Id), new { @id = "select-concentration", @class = "form-control", @onchange = "ConcentrationSelected()" })
             </div>
 
             <div class="well">
@@ -84,26 +109,28 @@
             </div>
 
             <input type="submit" value="Save" class="btn btn-default" />
-
+            @Html.ActionLink("Delete Account", "Delete", "Account", new { area = "" }, new { @class = "pull-right" })
         </div>
     </div>
 }
 
 <script>
-    function FillConcentrationList() {
-    var degreeId = $('#Degree').val();
-    $.ajax({
-        url: '/Account/FillConcentrationList',
-        type: "GET",
-        dataType: "JSON",
-        data: { id: degreeId },
-        success: function (concentrations) {
-            $("#Concentration").html(""); // clear before appending new list
-            $.each(concentrations, function (i, concentration) {
-                $("#Concentration").append(
-                    $('<option></option>').val(concentration.Id).html(concentration.Title));
-            });
-        }
-    });
-  }
+    function DegreeSelected() {
+        var degreeId = $('#select-degree').val();
+        $("#selected-degree-id").val(degreeId);
+        $.ajax({
+            url: '/Account/FillConcentrationList',
+            type: "GET",
+            dataType: "JSON",
+            cache: false,
+            data: { id: degreeId },
+            success: function (concentrations) {
+                $("#select-concentration").html("");
+                $.each(concentrations, function (i, concentration) {
+                    $("#select-concentration").append(
+                        $('<option></option>').val(concentration.Id).html(concentration.Title));
+                });
+            }
+        });
+    }
 </script>

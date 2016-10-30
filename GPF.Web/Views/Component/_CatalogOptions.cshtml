@@ -1,0 +1,39 @@
+﻿@{ 
+    string pageName;
+    pageName = (ViewContext.RouteData.Values["action"].ToString() == "Degrees") ? "Degree" : "Course";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Search Options</h3>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+
+            <div class="form-group">
+                <ul class="list-unstyled">
+                    @if (pageName == "Degree")
+                    {
+                        <li>@Html.ActionLink("View Courses", "Courses", "Catalog")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("View Degrees", "Degrees", "Catalog")</li>
+                    }
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <label for="search-id">@pageName ID Includes:</label>
+                <input type="text" class="form-control" id="search-id" placeholder="@pageName ID Includes...">
+            </div>
+            <div class="form-group">
+                <label for="search-name">@pageName Name Includes:</label>
+                <input type="text" class="form-control" id="search-name" placeholder="@pageName Name Includes...">
+            </div>
+
+            <button type="submit" class="btn btn-success">Search</button>
+            @Html.ActionLink("Search", "Modify", "Villa", new {id = "1"}, null)
+        </div>
+    </div>
+</div>

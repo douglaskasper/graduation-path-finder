@@ -21,6 +21,11 @@ namespace GPF.Domain.Services
             return true;
         }
 
+        public bool Delete(Account account)
+        {
+            return true;
+        }
+
         public Account GetAccount(Account account)
         {
             return null;

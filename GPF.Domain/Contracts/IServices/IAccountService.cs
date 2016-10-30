@@ -8,6 +8,7 @@ namespace GPF.Domain.Contracts.IServices
         bool Register(Account account);
         bool Login(Account account);
         bool Update(Account account);
+        bool Delete(Account account);
         Account GetAccount(Account account);
         List<Account> GetAccounts();
         List<Account> GetAccountsByRole(AccountRole role);

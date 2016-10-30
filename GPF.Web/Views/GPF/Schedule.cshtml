@@ -1,0 +1,102 @@
+﻿@model GPF.Web.ViewModels.GPFViewModel
+
+@{
+    ViewBag.Title = "Graduation Path";
+}
+
+<div class="page-header">
+    <h2>@ViewBag.Title</h2>
+</div>
+
+<div class="row">
+    @foreach (var term in Model.GPFSchedule.Terms)
+    {
+        <div class="col-sm-3">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    @term.Display
+                </div>
+                <div class="list-group">
+                    @foreach (var scheduledClass in term.ClassSchedule)
+                    {
+                        <a href="#" class="list-group-item">
+                            @scheduledClass.Course.DisplayId
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="well">
+    <p>GPF Session ID: @Model.GPFSession.Id</p>
+    @if (Model.GPFSession.Account != null && Model.GPFSession.Account.Id > 0)
+    {
+        <p>Account ID: @Model.GPFSession.Account.Id</p>
+    }
+    else
+    {
+        <p>Account ID: Guest</p>
+    }
+    <p>Degree: @Model.GPFSession.Degree.Title</p>
+    <p>Concentration: @Model.GPFSession.Concentration.Title</p>
+    <p>Entering Term: @(Model.GPFSession.EnteringTerm != null ? Model.GPFSession.EnteringTerm.Display : "")</p>
+    <p>Classes Per Quarter: @Model.GPFSession.ClassesPerQuarter</p>
+    <p>Class Delivery: @(Model.GPFSession.ClassDeliveryOption != null ? Model.GPFSession.ClassDeliveryOption.Description : "")</p>
+    @if (Model.GPFSession.ConcentrationCoursesSelected != null)
+    {
+        <p>
+            Selected Concentration Courses:
+            @if (Model.GPFSession.ConcentrationCoursesSelected.Count > 0)
+            {
+                <ul>
+                    @foreach (var course in Model.GPFSession.ConcentrationCoursesSelected)
+                    {
+                        <li>
+                            @course.Id
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <text>None</text>
+            }
+        </p>
+    }
+    @if (Model.GPFSession.ElectiveCoursesSelected != null)
+    {
+        <p>
+            Selected Elective Courses:
+            @if (Model.GPFSession.ElectiveCoursesSelected.Count > 0)
+            {
+                <ul>
+                    @foreach (var course in Model.GPFSession.ElectiveCoursesSelected)
+                    {
+                        <li>
+                            @course.Id
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <text>None</text>
+            }
+        </p>
+    }
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <p>
+            @Html.ActionLink("Go Back To Options", "Options", "GPF", null, new { @class = "btn btn-default" })
+
+            @if (GPF.Web.Lib.Statics.HasAuthCookie(Request))
+            {
+                @Html.ActionLink("View Saved GPF Sessions", "GPFSessions", "Account", null, new { @class = "btn btn-default" })
+            }
+        </p>
+    </div>
+</div>

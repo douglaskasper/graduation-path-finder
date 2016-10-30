@@ -7,6 +7,10 @@ namespace GPF.Domain.Models
         public int Id { get; set; }
         public int Number { get; set; }
         public string Department { get; set; }
+        public string DisplayId
+        {
+            get { return Department + Number.ToString(); }
+        }
 
         public string Title { get; set; }
         public string Description { get; set; }

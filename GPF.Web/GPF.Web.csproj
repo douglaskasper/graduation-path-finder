@@ -143,11 +143,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\AccountEditViewModel.cs" />
-    <Compile Include="ViewModels\CourseListViewModel.cs" />
+    <Compile Include="Lib\Statics.cs" />
+    <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Lib\Encryption\SHA1.cs" />
-    <Compile Include="ViewModels\DegreeListViewModel.cs" />
+    <Compile Include="ViewModels\CatalogViewModel.cs" />
+    <Compile Include="ViewModels\GPFViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -193,14 +194,15 @@
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\ClassHistory.cshtml" />
     <Content Include="Views\Catalog\Degrees.cshtml" />
-    <Content Include="Views\Catalog\_DegreeDetails.cshtml" />
     <Content Include="Views\Catalog\Courses.cshtml" />
-    <Content Include="Views\Catalog\_CourseDetails.cshtml" />
+    <Content Include="Views\Component\_CatalogOptions.cshtml" />
+    <Content Include="Views\Account\Students.cshtml" />
+    <Content Include="Views\GPF\Options.cshtml" />
+    <Content Include="Views\GPF\Schedule.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Properties\PublishProfiles\" />
-    <Folder Include="Views\GPF\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -1,0 +1,165 @@
+﻿@model GPF.Web.ViewModels.GPFViewModel
+
+@{
+    ViewBag.Title = "GPF: Options";
+}
+
+<div class="page-header">
+    <h2>@ViewBag.Title</h2>
+</div>
+
+<div class="alert alert-info" role="alert">
+    <strong>Heads up!</strong>
+    This tool will help you find the fastest graduation path at DePaul.
+    Start by making selections below!
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Set options and filters</h3>
+                </div>
+                <div class="panel-body">
+
+                    @if (Model.Impersonating)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            <p>
+                                Impersonating Account @GPF.Web.Lib.Statics.ImpersonateGet(Session).Id
+                                @Html.ActionLink("Stop Impersonation", "ImpersonateStop", "Account")
+                            </p>
+                        </div>
+                    }
+
+                    @Html.HiddenFor(model => model.GPFSession.Account.Id)
+                    @Html.HiddenFor(model => model.GPFSession.Id)
+
+                    <div class="form-group">
+                        <label>Degree</label>
+                        @Html.DropDownListFor(model => model.GPFSession.Degree.Id, new SelectList(Model.AvailableDegrees, "Id", "Title", Model.GPFSession.Degree.Id), new { @id = "select-degree", @class = "form-control", @onchange = "DegreeSelected()" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Concentration</label>
+                        @Html.DropDownListFor(model => model.GPFSession.Concentration.Id, new SelectList(Model.AvailableDegrees.Find(x => x.Id == Model.GPFSession.Degree.Id).Concentrations, "Id", "Title", Model.GPFSession.Concentration.Id), new { @id = "select-concentration", @class = "form-control", @onchange = "ConcentrationSelected()" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Concentration Courses (Select up to 4)</label>
+                        <p class="help-block">(Optional, hold Ctrl key to select more than one option)</p>
+                        @Html.ListBoxFor(model => model.ConcentrationCoursesSelected, new SelectList(Model.AvailableConcentrationCourses, "Id", "DisplayId"), new { @id = "select-concentration-courses", @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Elective Courses (Select up to 4)</label>
+                        <p class="help-block">(Optional, hold Ctrl key to select more than one option)</p>
+                        @Html.ListBoxFor(model => model.ElectiveCoursesSelected, new SelectList(Model.AvailableElectiveCourses, "Id", "DisplayId"), new { @id = "select-elective-courses", @class = "form-control" })
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Entering Year</label>
+                        @Html.DropDownListFor(model => model.EnteringYear, Model.EnteringYearList, null, new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Entering Quarter</label>
+                        @Html.DropDownListFor(model => model.EnteringQuarter, Model.EnteringQuarterList, null, new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Classes Per Quarter</label>
+                        @Html.DropDownListFor(model => model.ClassesPerQuarter, Model.ClassesPerQuarterList, null, new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        <label>Class Delivery</label>
+                        @Html.DropDownListFor(model => model.ClassDeliveryOption, Model.ClassDeliveryOptionList, null, new { @class = "form-control" })
+                    </div>
+
+                    <!-- TODO Display callouts where necessary. -->
+                    <div class="bs-callout bs-callout-warning">
+                        <h4>Important note</h4>
+                        <p>Because you selected <code>this option</code>, your outcome may be...</p>
+                    </div>
+
+                    <!-- TODO: Update progress bar when required step is completed. -->
+                    <div class="row grad-progress">
+                        <div class="col-sm-10">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped" role="progressbar"
+                                        aria-valuenow="60"
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                        style="width: 60%">
+                                    <span class="sr-only">60% Complete</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <span class="badge">6 / 10 Steps complete.</span>
+                        </div>
+                    </div>
+
+                    <!-- TODO: If required steps are complete, enable button. -->
+                    <input type="submit" value="Show the schedule!" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    function ConcentrationSelected() {
+        var concentrationId = $('#select-concentration').val();
+        $.ajax({
+            url: '/GPF/FillConcentrationCourseList',
+            type: "GET",
+            dataType: "JSON",
+            cache: false,
+            data: { id: concentrationId },
+            success: function (courses) {
+                $("#select-concentration-courses").html("");
+                $.each(courses, function (i, course) {
+                    $("#select-concentration-courses").append(
+                        $('<option></option>').val(course.Id).html(course.DisplayId));
+                });
+            }
+        });
+        $.ajax({
+            url: '/GPF/FillElectiveCourseList',
+            type: "GET",
+            dataType: "JSON",
+            cache: false,
+            data: { id: concentrationId },
+            success: function (courses) {
+                $("#select-elective-courses").html("");
+                $.each(courses, function (i, course) {
+                    $("#select-elective-courses").append(
+                        $('<option></option>').val(course.Id).html(course.DisplayId));
+                });
+            }
+        });
+    }
+    function DegreeSelected() {
+        var degreeId = $('#select-degree').val();
+        $.ajax({
+            url: '/GPF/FillConcentrationList',
+            type: "GET",
+            dataType: "JSON",
+            cache: false,
+            data: { id: degreeId },
+            success: function (concentrations) {
+                $("#select-concentration").html("");
+                $.each(concentrations, function (i, concentration) {
+                    $("#select-concentration").append(
+                        $('<option></option>').val(concentration.Id).html(concentration.Title));
+                });
+            }
+        });
+        
+        ConcentrationSelected()
+    }
+</script>

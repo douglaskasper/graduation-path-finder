@@ -1,42 +1,83 @@
-﻿@model GPF.Web.ViewModels.CourseListViewModel
+﻿@model GPF.Web.ViewModels.CatalogViewModel
 @{
-    ViewBag.Title = "Course Catalog";
+    ViewBag.Title = "Course";
 }
 
 <div class="page-header">
-    <h1>@ViewBag.Title</h1>
+    <h2>Browse Catalog</h2>
 </div>
 
-<div class="panel panel-primary">
-    <div class="panel-heading">Courses</div>
-    <div class="panel-body">
-        <div class="panel-group">
-            @foreach (var course in Model.Courses)
-            {
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#course-@course.Id">@course.Title</a>
-                        </h4>
-                    </div>
-                    <div id="course-@course.Id" class="panel-collapse collapse">
-                        <div class="panel-body">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            Search Options
+            <button class="btn btn-default" data-toggle="collapse" data-target="#search-options">
+                Expand
+            </button>
+        </h3>
+    </div>
+    <div id="search-options" class="panel-body collapse">
+        @using (Html.BeginForm())
+        {
+            <div class="form-group">
+
+                <div class="form-group">
+                    <ul class="list-unstyled">
+                        <li>@Html.ActionLink("View Degrees", "Degrees", "Catalog")</li>
+                    </ul>
+                </div>
+
+                <div class="form-group">
+                    <label for="search-id">@ViewBag.Title Number Is Exactly:</label>
+                    @Html.TextBoxFor(model => model.SearchId, new { @class = "form-control", @placeholder = "Number Is..." })
+                </div>
+                <div class="form-group">
+                    <label for="search-name">@ViewBag.Title Title Includes:</label>
+                    @Html.TextBoxFor(model => model.SearchTitle, new { @class = "form-control", @placeholder = "Title Includes..." })
+                </div>
+
+                <button type="submit" class="btn btn-success">Search</button>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <h3 class="page-header">
+            Courses
+            @(Model.SearchId > 0 ? " ID = '" + Model.SearchId.ToString() + "'" : "")
+            @(!string.IsNullOrWhiteSpace(Model.SearchTitle) ? " Title includes '" + Model.SearchTitle + "'" : "")
+        </h3>
+
+        @foreach (var course in Model.Courses)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#course-@course.Id">@course.Title</a>
+                    </h4>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="course-@course.Id" class="panel-body in">
                             <p>@course.Description</p>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">Prerequisites:</div>
-                                <div class="list-group">
+
+                            <div class="well">
+                                <p>Concentrations:</p>
+                                <ul>
                                     @foreach (var prereq in course.Prerequisites)
                                     {
-                                        <a href="#" class="list-group-item">
+                                        <li>
                                             @prereq.Title
-                                        </a>
+                                        </li>
                                     }
-                                </div>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
 </div>

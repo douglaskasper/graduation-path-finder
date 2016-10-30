@@ -8,6 +8,7 @@ namespace GPF.Domain.Contracts.IServices
     {
         ClassOffering GetClassById(ClassOffering classOffering);
         List<ClassOffering> GetClasses();
+        List<ClassOffering> GetClassHistory(Account account);
         List<ClassOffering> GetClassesOfferedAfterDate(DateTime date);
         List<ClassOffering> GetClassesByDeliveryOption(ClassDelivery option);
     }

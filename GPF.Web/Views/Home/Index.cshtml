@@ -1,6 +1,4 @@
-﻿@model GPF.Web.ViewModels.CourseListViewModel
-
-@{
+﻿@{
     ViewBag.Title = "GPF Home";
 }
 
@@ -8,6 +6,7 @@
     <h1>@ViewBag.Title</h1>
 </div>
 
+@*
 <div class="alert alert-info" role="alert">
     <strong>Heads up!</strong>
     This tool will help you find the fastest graduation path at DePaul.
@@ -20,4 +19,5 @@
     </div>
 </div>
 
-@Html.Partial("~/Views/Component/_CourseList.cshtml", Model)
+Html.Partial("~/Views/Component/_CourseList.cshtml", Model)
+*@

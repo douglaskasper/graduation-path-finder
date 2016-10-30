@@ -8,46 +8,72 @@ namespace GPF.Domain.Services.Sandbox
     {
         public Degree GetDegreeById(Degree degree)
         {
-            degree = new Degree();
-            degree.Id = 1;
-            degree.Title = "Computer Science";
-            degree.College = "CDM";
-            degree.Description = "This is a description of the Computer Science degree.";
-            degree.RequiredCourses = new List<Course>() {
-                new Course { Id = 1 },
-                new Course { Id = 2 }
-            };
-            degree.Concentrations = new List<Concentration>();
-            degree.Concentrations.Add(new Concentration
+            if (degree.Id == 1)
             {
-                Id = 1,
-                Title = "Software and Systems Development",
-                Courses = new List<Course>
+                degree = new Degree();
+                degree.Id = 1;
+                degree.Title = "Computer Science";
+                degree.College = "CDM";
+                degree.Description = "This is a description of the Computer Science degree.";
+                degree.RequiredCourses = new List<Course>() {
+                    new Course { Id = 1 },
+                    new Course { Id = 2 }
+                };
+                degree.Concentrations = new List<Concentration>();
+                degree.Concentrations.Add(new Concentration
                 {
-                    new Course { Id = 3 },
-                    new Course { Id = 4 }
-                }
-            });
-            degree.Concentrations.Add(new Concentration
+                    Id = 1,
+                    Title = "Software and Systems Development",
+                    Courses = new List<Course>
+                    {
+                        new Course { Id = 3 },
+                        new Course { Id = 4 }
+                    }
+                });
+                degree.Concentrations.Add(new Concentration
+                {
+                    Id = 2,
+                    Title = "Theory",
+                    Courses = new List<Course>
+                    {
+                        new Course { Id = 3 },
+                        new Course { Id = 4 }
+                    }
+                });
+                degree.Concentrations.Add(new Concentration
+                {
+                    Id = 3,
+                    Title = "Systems",
+                    Courses = new List<Course>
+                    {
+                        new Course { Id = 3 },
+                        new Course { Id = 4 }
+                    }
+                });
+            }
+            else
             {
-                Id = 2,
-                Title = "Theory",
-                Courses = new List<Course>
-                {
-                    new Course { Id = 3 },
-                    new Course { Id = 4 }
-                }
-            });
-            degree.Concentrations.Add(new Concentration
-            {
-                Id = 3,
-                Title = "Systems",
-                Courses = new List<Course>
-                {
-                    new Course { Id = 3 },
-                    new Course { Id = 4 }
-                }
-            });
+                degree = new Degree();
+                degree.Id = 2;
+                degree.Title = "Information Systems";
+                degree.College = "CDM";
+                degree.Description = "This is a description of the Information Systems degree.";
+                degree.RequiredCourses = new List<Course>() {
+                    new Course { Id = 1 },
+                    new Course { Id = 2 }
+                };
+                degree.Concentrations = new List<Concentration>();
+                degree.Concentrations.Add(new Concentration
+                    {
+                        Id = 1,
+                        Title = "Theory",
+                        Courses = new List<Course>
+                        {
+                            new Course { Id = 3 },
+                            new Course { Id = 4 }
+                        }
+                });
+            }
 
             return degree;
         }

@@ -16,12 +16,17 @@ namespace GPF.Domain.Services
             return null;
         }
 
-        public List<Course> GetCoursesByDegree(Degree degree)
+        public List<Course> GetCoursesRequiredByDegree(Degree degree)
         {
             return null;
         }
 
         public List<Course> GetCoursesByConcentration(Concentration concentration)
+        {
+            return null;
+        }
+
+        public List<Course> GetAllElectivesByConcentration(Concentration excludeConcentration)
         {
             return null;
         }

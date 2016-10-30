@@ -17,6 +17,11 @@ namespace GPF.Domain.Services
             return null;
         }
 
+        public List<ClassOffering> GetClassHistory(Account account)
+        {
+            return null;
+        }
+
         public List<ClassOffering> GetClassesOfferedAfterDate(DateTime date)
         {
             return null;

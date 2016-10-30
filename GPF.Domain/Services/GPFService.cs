@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GPF.Domain.Contracts.IServices;
 using GPF.Domain.Models;
 
@@ -22,6 +23,11 @@ namespace GPF.Domain.Services
         }
 
         public List<GPFSession> GetSessionsByAccountId(Account account)
+        {
+            return null;
+        }
+
+        public GPFSchedule GetSessionSchedule(GPFSession session)
         {
             return null;
         }

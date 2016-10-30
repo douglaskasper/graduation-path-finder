@@ -7,7 +7,8 @@ namespace GPF.Domain.Contracts.IServices
     {
         Course GetCoursesById(Course course);
         List<Course> GetCourses();
-        List<Course> GetCoursesByDegree(Degree degree);
+        List<Course> GetCoursesRequiredByDegree(Degree degree);
         List<Course> GetCoursesByConcentration(Concentration concentration);
+        List<Course> GetAllElectivesByConcentration(Concentration excludeConcentration);
     }
 }

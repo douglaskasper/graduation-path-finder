@@ -8,8 +8,8 @@
             _description = description;
         }
         
-        public static readonly AccountRole Administrator = new AccountRole("S", "Administrator");
-        public static readonly AccountRole Faculty = new AccountRole("S", "Faculty");
+        public static readonly AccountRole Administrator = new AccountRole("A", "Administrator");
+        public static readonly AccountRole Faculty = new AccountRole("F", "Faculty");
         public static readonly AccountRole Student = new AccountRole("S", "Student");
     }
 }

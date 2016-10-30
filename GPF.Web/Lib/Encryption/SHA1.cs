@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GPF.Lib.Encryption
+namespace GPF.Web.Lib.Encryption
 {
     public class SHA1
     {

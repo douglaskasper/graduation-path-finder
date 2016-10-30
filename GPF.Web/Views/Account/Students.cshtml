@@ -1,7 +1,7 @@
 ﻿@model GPF.Web.ViewModels.AccountViewModel
 
 @{
-    ViewBag.Title = "ClassHistory";
+    ViewBag.Title = "Students";
 }
 
 <div class="page-header">
@@ -36,40 +36,36 @@
     </div><!--/.container-fluid -->
 </nav>
 
-<h4>Class History</h4>
-
-@if (Model.Impersonating)
-{
-    <div class="alert alert-danger" role="alert">
-        <p>
-            Impersonating Account @GPF.Web.Lib.Statics.ImpersonateGet(Session).Id
-            @Html.ActionLink("Stop Impersonation", "ImpersonateStop", "Account")
-        </p>
-    </div>
-}
+<h4>Students</h4>
 
 <div class="row">
     <div class="col-xs-12">
         <table class="table">
             <thead>
                 <tr>
-                    <th>Course</th>
-                    <th>Term</th>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @if (Model.ClassHistory != null)
+                @if (Model.StudentAccounts != null)
                 {
-                    foreach (var classOffering in Model.ClassHistory)
+                    foreach (var student in Model.StudentAccounts)
                     {
                         <tr>
                             <td>
-                                @classOffering.Course.Department
-                                @classOffering.Course.Number
+                                @student.Id
                             </td>
                             <td>
-                                @classOffering.AcademicTerm.Quarter.Description
-                                @classOffering.AcademicTerm.Year
+                                @student.FirstName
+                            </td>
+                            <td>
+                                @student.LastName
+                            </td>
+                            <td>
+                                @Html.ActionLink("Impersonate", "Impersonate", "Account", new { id = student.Id }, null)
                             </td>
                         </tr>
                     }
@@ -78,7 +74,7 @@
                 {
                     <tr>
                         <td>
-                            No class history found.
+                            No students found.
                         </td>
                     </tr>
                 }

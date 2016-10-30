@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using GPF.Domain.Contracts.IServices;
 using GPF.Domain.Models;
@@ -22,6 +23,7 @@ namespace GPF.Web.Controllers
             return View();
         }
 
+        [HttpGet]
         public ActionResult Degrees()
         {
             /*
@@ -29,23 +31,70 @@ namespace GPF.Web.Controllers
                     Search selections filter list w/ js?
             */
             List<Degree> degrees = _degreeService.GetDegrees();
-            DegreeListViewModel model = new DegreeListViewModel()
+            CatalogViewModel model = new CatalogViewModel()
             {
                 Degrees = degrees
             };
             return View(model);
         }
+        
+        [HttpPost]
+        public ActionResult Degrees(CatalogViewModel catalogModel)
+        {
+            List<Degree> degrees = _degreeService.GetDegrees();
 
+            if (catalogModel.SearchId > 0)
+            {
+                degrees = degrees.FindAll(x => x.Id == catalogModel.SearchId);
+            }
+            if (!string.IsNullOrWhiteSpace(catalogModel.SearchTitle))
+            {
+                degrees = degrees.FindAll(x => x.Title.ToLower().Contains(catalogModel.SearchTitle.ToLower()));
+            }
+
+            CatalogViewModel model = new CatalogViewModel()
+            {
+                Degrees = degrees,
+                SearchId = catalogModel.SearchId,
+                SearchTitle = catalogModel.SearchTitle
+            };
+            return View(model);
+        }
+
+        [HttpGet]
         public ActionResult Courses()
         {
             /*
-                TODO: Display full list of courses, search options on top.
+                TODO: Display full list of degrees, search options on top.
                     Search selections filter list w/ js?
             */
             List<Course> courses = _courseService.GetCourses();
-            CourseListViewModel model = new CourseListViewModel()
+            CatalogViewModel model = new CatalogViewModel()
             {
                 Courses = courses
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Courses(CatalogViewModel catalogModel)
+        {
+            List<Course> courses = _courseService.GetCourses();
+
+            if (catalogModel.SearchId > 0)
+            {
+                courses = courses.FindAll(x => x.Number == catalogModel.SearchId);
+            }
+            if (!string.IsNullOrWhiteSpace(catalogModel.SearchTitle))
+            {
+                courses = courses.FindAll(x => x.Title.ToLower().Contains(catalogModel.SearchTitle.ToLower()));
+            }
+
+            CatalogViewModel model = new CatalogViewModel()
+            {
+                Courses = courses,
+                SearchId = catalogModel.SearchId,
+                SearchTitle = catalogModel.SearchTitle
             };
             return View(model);
         }

@@ -16,9 +16,7 @@ namespace GPF.Web.Controllers
 
         public ActionResult Index()
         {
-            CourseListViewModel courseListViewModel = new CourseListViewModel();
-            courseListViewModel.Courses = _service.GetCourses();
-            return View(courseListViewModel);
+            return RedirectToAction("Options", "GPF");
         }
     }
 }
