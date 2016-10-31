@@ -3,7 +3,6 @@ using Microsoft.Practices.Unity;
 using Unity.Mvc5;
 
 using GPF.Domain.Contracts.IServices;
-using GPF.Domain.Services.Sandbox;
 
 namespace GPF
 {
@@ -13,11 +12,11 @@ namespace GPF
         {
 			var container = new UnityContainer();
 
-            container.RegisterType<IAccountService, AccountService>();
-            container.RegisterType<ICourseService, CourseService>();
-            container.RegisterType<IDegreeService, DegreeService>();
-            container.RegisterType<IClassOfferingService, ClassOfferingService>();
-            container.RegisterType<IGPFService, GPFService>();
+            container.RegisterType<IAccountService, GPF.Domain.Services.Sandbox.AccountService>();
+            container.RegisterType<ICourseService, GPF.Domain.Services.Sandbox.CourseService>();
+            container.RegisterType<IDegreeService, GPF.Domain.Services.Sandbox.DegreeService>();
+            container.RegisterType<IClassOfferingService, GPF.Domain.Services.Sandbox.ClassOfferingService>();
+            container.RegisterType<IGPFService, GPF.Domain.Services.Sandbox.GPFService>();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }
