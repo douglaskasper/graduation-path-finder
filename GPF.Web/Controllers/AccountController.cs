@@ -168,6 +168,28 @@ namespace GPF.Web.Controllers
             return View(model);
         }
 
+        public ActionResult DataView()
+        {
+            Account account = GetAuthCookieAccount();
+            if (account == null)
+                return RedirectToAction("Login", "Account");
+            else if (account.Role != AccountRole.Administrator)
+                return RedirectToAction("Edit", "Account");
+
+            List<Account> studentAccounts = new List<Account>();
+            studentAccounts = _accountService.GetAccounts();
+
+            studentAccounts.FindAll(x => x.Role == AccountRole.Student);
+
+            AccountViewModel model = new AccountViewModel
+            {
+                Account = account,
+                StudentAccounts = studentAccounts
+            };
+
+            return View(model);
+        }
+
         public ActionResult Impersonate(int id)
         {
             Account account = GetAuthCookieAccount();

@@ -199,6 +199,7 @@
     <Content Include="Views\Account\Students.cshtml" />
     <Content Include="Views\GPF\Options.cshtml" />
     <Content Include="Views\GPF\Schedule.cshtml" />
+    <Content Include="Views\Account\DataView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
