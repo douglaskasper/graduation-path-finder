@@ -10,5 +10,11 @@ namespace GPF.Domain.Models
         {
             Terms = new List<AcademicTerm>();
         }
+
+        public bool AddClass(ClassOffering classOffering)
+        {
+            //add class to term
+            return true; //if it was able to add
+        }
     }
 }

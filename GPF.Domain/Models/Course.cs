@@ -19,5 +19,6 @@ namespace GPF.Domain.Models
         public bool Active { get; set; }
 
         public List<Course> Prerequisites { get; set; }
+        private List<ClassOffering> classesScheduled { get; set; }
     }
 }

@@ -6,7 +6,7 @@
         public int Section { get; set; }
 
         public Course Course { get; set; }
-        public Classroom Classroom { get; set; }
+        public ClassLocation Location { get; set; }
         public Account Instructor { get; set; }
         
         public AcademicTerm AcademicTerm { get; set; }

@@ -1,4 +1,4 @@
-IF NOT EXISTS (	SELECT * FROM INFORMATION_SCHEMA.TABLES 
+/*IF NOT EXISTS (	SELECT * FROM INFORMATION_SCHEMA.TABLES 
 				WHERE TABLE_SCHEMA = 'dbo' 
 					AND  TABLE_NAME = 'tblCampus')
 BEGIN
@@ -40,7 +40,7 @@ BEGIN
 		PRIMARY KEY (clr_id),
 		FOREIGN KEY (bld_id) REFERENCES tblBuilding(bld_id)
 	)
-END
+END*/
 
 IF NOT EXISTS (	SELECT * FROM INFORMATION_SCHEMA.TABLES 
 				WHERE TABLE_SCHEMA = 'dbo' 
@@ -156,29 +156,17 @@ BEGIN
 		clo_year INT NOT NULL,
 		clo_quarter CHAR(20), -- Fall, Winter, Spring, SummerI, SummerII, Summer10Week, DecIntersession
 		clo_day_of_week CHAR(5),
+		clo_location CHAR(15), -- ONLINE, LOOP, LINCOLNPARK, etc.
 		crs_id INT NOT NULL,
-		clr_id INT NULL, -- Classroom ID, NULL = Online.
+		-- clr_id INT NULL, -- Classroom ID, NULL = Online.
 		acc_id_instructor INT NOT NULL,
 		PRIMARY KEY (clo_id),
 		FOREIGN KEY (crs_id) REFERENCES tblCourse(crs_id),
 		FOREIGN KEY (clr_id) REFERENCES tblClassroom(clr_id),
-		FOREIGN KEY (acc_id_instructor) REFERENCES tblAccount(acc_id),
+		FOREIGN KEY (acc_id_instructor) REFERENCES tblAccount(acc_id)
 	)
 END
 
-/*IF NOT EXISTS (	SELECT * FROM INFORMATION_SCHEMA.TABLES 
-				WHERE TABLE_SCHEMA = 'dbo' 
-					AND  TABLE_NAME = 'tblGPFSession')
-BEGIN
-	CREATE TABLE tblGPFSession (
-		gpf_id INT IDENTITY(1,1) NOT NULL,
-		gpf_option VARCHAR(25) NOT NULL, -- DEGREE, CONCENTRATION, ENTERING_TERM, CLASSES_PER_QUARTER, CLASS_DELIVERY
-		gpf_value VARCHAR(1000),
-		acc_id INT NOT NULL,
-		PRIMARY KEY (gpf_id, gpf_option),
-		FOREIGN KEY (acc_id) REFERENCES tblAccount(acc_id)
-	)
-END*/
 IF NOT EXISTS (	SELECT * FROM INFORMATION_SCHEMA.TABLES 
 				WHERE TABLE_SCHEMA = 'dbo' 
 					AND  TABLE_NAME = 'tblGPFSession')
