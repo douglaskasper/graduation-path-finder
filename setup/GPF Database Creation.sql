@@ -1,47 +1,3 @@
-/*IF NOT EXISTS (	SELECT * FROM INFORMATION_SCHEMA.TABLES 
-				WHERE TABLE_SCHEMA = 'dbo' 
-					AND  TABLE_NAME = 'tblCampus')
-BEGIN
-	CREATE TABLE tblCampus (
-		cam_id INT IDENTITY(1,1) NOT NULL,
-		cam_street VARCHAR(100),
-		cam_city VARCHAR(50),
-		cam_state CHAR(2),
-		cam_zip CHAR(15),
-		PRIMARY KEY (cam_id)
-	)
-END
-
-IF NOT EXISTS (	SELECT * FROM INFORMATION_SCHEMA.TABLES 
-				WHERE TABLE_SCHEMA = 'dbo' 
-					AND  TABLE_NAME = 'tblBuilding')
-BEGIN
-	CREATE TABLE tblBuilding (
-		bld_id INT IDENTITY(1,1) NOT NULL,
-		bld_street VARCHAR(100),
-		bld_city VARCHAR(50),
-		bld_state CHAR(2),
-		bld_zip CHAR(15),
-		cam_id INT NOT NULL,
-		PRIMARY KEY (bld_id),
-		FOREIGN KEY (cam_id) REFERENCES tblCampus(cam_id)
-	)
-END
-
-IF NOT EXISTS (	SELECT * FROM INFORMATION_SCHEMA.TABLES 
-				WHERE TABLE_SCHEMA = 'dbo' 
-					AND  TABLE_NAME = 'tblClassroom')
-BEGIN
-	CREATE TABLE tblClassroom (
-		clr_id INT IDENTITY(1,1) NOT NULL,
-		clr_number INT NOT NULL,
-		clr_section CHAR(10),
-		bld_id INT NOT NULL,
-		PRIMARY KEY (clr_id),
-		FOREIGN KEY (bld_id) REFERENCES tblBuilding(bld_id)
-	)
-END*/
-
 IF NOT EXISTS (	SELECT * FROM INFORMATION_SCHEMA.TABLES 
 				WHERE TABLE_SCHEMA = 'dbo' 
 					AND  TABLE_NAME = 'tblDegree')
@@ -136,7 +92,7 @@ BEGIN
 		acc_state CHAR(2),
 		acc_zip CHAR(15),
 		acc_phone CHAR(10),
-		acc_role VARCHAR(10) NOT NULL, -- A = Admin, F = Faculty, S = Student
+		acc_role VARCHAR(10) NOT NULL DEFAULT 'S', -- A = Admin, F = Faculty, S = Student
 		deg_id INT,
 		con_id INT,
 		PRIMARY KEY (acc_id),
@@ -156,7 +112,7 @@ BEGIN
 		clo_year INT NOT NULL,
 		clo_quarter CHAR(20), -- Fall, Winter, Spring, SummerI, SummerII, Summer10Week, DecIntersession
 		clo_day_of_week CHAR(5),
-		clo_location CHAR(15), -- ONLINE, LOOP, LINCOLNPARK, etc.
+		clo_location CHAR(15) DEFAULT 'ONLINE', -- ONLINE, LOOP, LINCOLNPARK, etc.
 		crs_id INT NOT NULL,
 		-- clr_id INT NULL, -- Classroom ID, NULL = Online.
 		acc_id_instructor INT NOT NULL,
@@ -179,7 +135,7 @@ BEGIN
 		gpf_entering_year INT,
 		gpf_entering_quarter CHAR(20),
 		gpf_classes_per_quarter INT,
-		gpf_class_delivery CHAR(2), -- C = In Class, O = Online, CO = In Class And Online
+		gpf_class_delivery CHAR(2)  DEFAULT 'O', -- C = In Class, O = Online, CO = In Class And Online
 		PRIMARY KEY (gpf_id),
 		FOREIGN KEY (acc_id) REFERENCES tblAccount(acc_id),
 		FOREIGN KEY (deg_id) REFERENCES tblDegree(deg_id),
