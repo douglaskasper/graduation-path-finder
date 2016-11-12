@@ -23,6 +23,7 @@
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Edit", "Edit", "Account")</li>
                 <li>@Html.ActionLink("Class History", "ClassHistory", "Account")</li>
+                <li>@Html.ActionLink("GPF History", "GPFHistory", "Account")</li>
                 @if (Model.Account.Role.Value == "F".ToString() || Model.Account.Role.Value == "A".ToString())
                 {
                     <li>@Html.ActionLink("Students", "Students", "Account")</li>

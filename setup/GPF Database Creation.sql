@@ -18,7 +18,9 @@ BEGIN
 	CREATE TABLE tblConcentration (
 		con_id INT IDENTITY(1,1) NOT NULL,
 		con_title VARCHAR(20),
+		deg_id INT NOT NULL,
 		PRIMARY KEY (con_id)
+		FOREIGN KEY (deg_id) REFERENCES tblDegree(deg_id),
 	)
 END
 

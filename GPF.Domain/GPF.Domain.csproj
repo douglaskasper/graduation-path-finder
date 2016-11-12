@@ -52,6 +52,7 @@
     <Compile Include="Models\Campus.cs" />
     <Compile Include="Models\ClassDay.cs" />
     <Compile Include="Models\ClassDelivery.cs" />
+    <Compile Include="Models\ClassLocation.cs" />
     <Compile Include="Models\ClassOffering.cs" />
     <Compile Include="Models\Classroom.cs" />
     <Compile Include="Models\ClassStatus.cs" />

@@ -236,6 +236,12 @@ namespace GPF.Web.Controllers
             return View(model);
         }
 
+        public ActionResult GPFHistory()
+        {
+            //placeholder for GPF history display page.
+            return View();
+        }
+
         public ActionResult FillConcentrationList(int id)
         {
             Degree degree = _degreeService.GetDegreeById(new Degree { Id = id });

@@ -200,6 +200,7 @@
     <Content Include="Views\GPF\Options.cshtml" />
     <Content Include="Views\GPF\Schedule.cshtml" />
     <Content Include="Views\Account\DataView.cshtml" />
+    <Content Include="Views\Account\GPFHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
