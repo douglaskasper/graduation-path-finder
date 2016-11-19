@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.Web.Security;
 using GPF.Domain.Contracts.IServices;
 using GPF.Domain.Models;
 using GPF.Web.ViewModels;
+using GPF.Web.Lib;
 
 namespace GPF.Web.Controllers
 {
@@ -11,11 +13,13 @@ namespace GPF.Web.Controllers
     {
         IDegreeService _degreeService;
         ICourseService _courseService;
+        IAccountService _accountService;
 
-        public CatalogController(IDegreeService degreeService, ICourseService courseService)
+        public CatalogController(IDegreeService degreeService, ICourseService courseService, IAccountService accountService)
         {
             _degreeService = degreeService;
             _courseService = courseService;
+            _accountService = accountService;
         }
 
         public ActionResult Index()
@@ -26,10 +30,6 @@ namespace GPF.Web.Controllers
         [HttpGet]
         public ActionResult Degrees()
         {
-            /*
-                TODO: Display full list of degrees, search options on top.
-                    Search selections filter list w/ js?
-            */
             List<Degree> degrees = _degreeService.GetDegrees();
             CatalogViewModel model = new CatalogViewModel()
             {
@@ -64,14 +64,27 @@ namespace GPF.Web.Controllers
         [HttpGet]
         public ActionResult Courses()
         {
-            /*
-                TODO: Display full list of degrees, search options on top.
-                    Search selections filter list w/ js?
-            */
             List<Course> courses = _courseService.GetCourses();
+
+            foreach (var course in courses)
+            {
+                course.Prerequisites = _courseService.GetCoursePrereqs(course.Id);
+            }
+
+            Account account = GetAuthCookieAccount();
+            AccountRole accountRole = null;
+            if (account != null && account.Id > 0)
+                accountRole = account.Role;
+
+            Account impersonateAccount = Statics.ImpersonateGet(Session);
+            if (impersonateAccount != null)
+                account = impersonateAccount;
+
             CatalogViewModel model = new CatalogViewModel()
             {
-                Courses = courses
+                Courses = courses,
+                ActingAccount = account,
+                AccountLoggedInRole = accountRole
             };
             return View(model);
         }
@@ -90,29 +103,81 @@ namespace GPF.Web.Controllers
                 courses = courses.FindAll(x => x.Title.ToLower().Contains(catalogModel.SearchTitle.ToLower()));
             }
 
+            foreach (var course in courses)
+            {
+                course.Prerequisites = _courseService.GetCoursePrereqs(course.Id);
+            }
+
+            Account account = GetAuthCookieAccount();
+            AccountRole accountRole = null;
+            if (account != null && account.Id > 0)
+                accountRole = account.Role;
+
+            Account impersonateAccount = Statics.ImpersonateGet(Session);
+            if (impersonateAccount != null)
+                account = impersonateAccount;
+            
             CatalogViewModel model = new CatalogViewModel()
             {
                 Courses = courses,
                 SearchId = catalogModel.SearchId,
-                SearchTitle = catalogModel.SearchTitle
+                SearchTitle = catalogModel.SearchTitle,
+                ActingAccount = account,
+                AccountLoggedInRole = accountRole
             };
+
             return View(model);
         }
 
-        public ActionResult DegreeDetails()
+        public ActionResult AddCourseToHistory(int? id)
         {
-            /*
-                TODO: Displays data on specific degree, including degree requirements.
-            */
-            return View();
+            Account account = GetAuthCookieAccount();
+            if (account == null)
+                return RedirectToAction("Login", "Account");
+            else if (account.Role == AccountRole.Student)
+                return RedirectToAction("Edit", "Account");
+
+            Account impersonateAccount = Statics.ImpersonateGet(Session);
+            if (impersonateAccount != null)
+                account = impersonateAccount;
+
+            if (id.HasValue)
+            {
+                _accountService.AddCourseToHistory(account, id.Value);
+            }
+
+            return RedirectToAction("ClassHistory", "Account");
         }
 
-        public ActionResult CourseDetails()
+        public Account GetAuthCookieAccount()
         {
-            /*
-                TODO: Displays data on specific course, including prerequisites.
-            */
-            return View();
+            if (Lib.Statics.HasAuthCookie(Request))
+            {
+                string username = GetAuthCookieUsername();
+                if (!string.IsNullOrWhiteSpace(username))
+                {
+                    Account account = new Account() { Username = username };
+                    account = _accountService.GetAccount(account.Username);
+
+                    if (account == null || account.Id <= 0)
+                    {
+                        Statics.KillCookie(Request);
+                        return null;
+                    }
+
+                    return account;
+                }
+            }
+            return null;
+        }
+        public string GetAuthCookieUsername()
+        {
+            if (Request.Cookies[FormsAuthentication.FormsCookieName] != null)
+            {
+                return FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            }
+
+            return null;
         }
     }
 }

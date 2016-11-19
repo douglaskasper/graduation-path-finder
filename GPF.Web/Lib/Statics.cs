@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using System.Web.Security;
 using System.Web.WebPages;
 using GPF.Domain.Models;
@@ -15,6 +16,14 @@ namespace GPF.Web.Lib
             }
 
             return false;
+        }
+
+        public static void KillCookie(HttpRequestBase request)
+        {
+            if (request.Cookies[FormsAuthentication.FormsCookieName] != null)
+            {
+                request.Cookies[FormsAuthentication.FormsCookieName].Expires = DateTime.Now.AddDays(-1);
+            }
         }
 
         public static Account ImpersonateGet(HttpSessionStateBase session)

@@ -6,6 +6,7 @@ namespace GPF.Domain.Models
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public int DegreeId { get; set; }
 
         public List<Course> Courses { get; set; }
     }

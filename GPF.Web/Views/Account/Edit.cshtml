@@ -23,6 +23,7 @@
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Edit", "Edit", "Account")</li>
                 <li>@Html.ActionLink("Class History", "ClassHistory", "Account")</li>
+                <li>@Html.ActionLink("GPF History", "GPFHistory", "Account")</li>
                 @if (Model.Account.Role.Value == "F".ToString() || Model.Account.Role.Value == "A".ToString())
                 {
                     <li>@Html.ActionLink("Students", "Students", "Account")</li>
@@ -38,8 +39,6 @@
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Edit @Model.Account.Role.Description Account</h3>
@@ -55,8 +54,6 @@
                     </p>
                 </div>
             }
-
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.Account.Id)
 
             <div class="form-group">
@@ -66,13 +63,11 @@
 
             <div class="form-group">
                 <label>First Name</label>
-                @Html.EditorFor(model => model.Account.FirstName, new { htmlAttributes = new { @class = "form-control", @placeholder = "First Name"} })
-                @Html.ValidationMessageFor(model => model.Account.FirstName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Account.FirstName, new { htmlAttributes = new { @class = "form-control", @placeholder = "First Name" } })
             </div>
             <div class="form-group">
                 <label>Last Name</label>
                 @Html.EditorFor(model => model.Account.LastName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Last Name" } })
-                @Html.ValidationMessageFor(model => model.Account.LastName, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group">
@@ -89,22 +84,18 @@
                 <div class="form-group">
                     <label>Street</label>
                     @Html.EditorFor(model => model.Account.Street, new { htmlAttributes = new { @class = "form-control", @placeholder = "Street" } })
-                    @Html.ValidationMessageFor(model => model.Account.Street, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
                     <label>City</label>
                     @Html.EditorFor(model => model.Account.City, new { htmlAttributes = new { @class = "form-control", @placeholder = "City" } })
-                    @Html.ValidationMessageFor(model => model.Account.City, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
                     <label>State</label>
                     @Html.EditorFor(model => model.Account.State, new { htmlAttributes = new { @class = "form-control", @placeholder = "State" } })
-                    @Html.ValidationMessageFor(model => model.Account.State, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
                     <label>Zip</label>
                     @Html.EditorFor(model => model.Account.Zip, new { htmlAttributes = new { @class = "form-control", @placeholder = "Zip" } })
-                    @Html.ValidationMessageFor(model => model.Account.Zip, "", new { @class = "text-danger" })
                 </div>
             </div>
 

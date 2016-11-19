@@ -158,14 +158,14 @@ END
 
 IF NOT EXISTS (	SELECT * FROM INFORMATION_SCHEMA.TABLES 
 				WHERE TABLE_SCHEMA = 'dbo' 
-					AND  TABLE_NAME = 'tblClassHistory')
+					AND  TABLE_NAME = 'tblCourseHistory')
 BEGIN
-	CREATE TABLE tblClassHistory (
+	CREATE TABLE tblCourseHistory (
 		acc_id INT NOT NULL,
-		clo_id INT NOT NULL,
+		crs_id INT NOT NULL,
 		clh_grade CHAR(5),
-		PRIMARY KEY (acc_id, clo_id),
+		PRIMARY KEY (acc_id, crs_id),
 		FOREIGN KEY (acc_id) REFERENCES tblAccount(acc_id),
-		FOREIGN KEY (clo_id) REFERENCES tblClassOffering(clo_id)
+		FOREIGN KEY (crs_id) REFERENCES tblCourse(crs_id)
 	)
 END

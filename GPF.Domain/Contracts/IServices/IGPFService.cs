@@ -6,9 +6,9 @@ namespace GPF.Domain.Contracts.IServices
     public interface IGPFService
     {
         bool SaveSession(GPFSession session);
-        GPFSession GetSessionById(GPFSession session);
+        GPFSession GetSessionById(int sessionId);
         List<GPFSession> GetSessions();
-        List<GPFSession> GetSessionsByAccountId(Account account);
+        List<GPFSession> GetSessionsByAccountId(int accountId);
         GPFSchedule GetSessionSchedule(GPFSession session);
     }
 }

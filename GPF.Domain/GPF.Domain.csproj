@@ -75,6 +75,7 @@
     <Compile Include="Services\Sandbox\CourseService.cs" />
     <Compile Include="Services\Sandbox\DegreeService.cs" />
     <Compile Include="Services\Sandbox\GPFService.cs" />
+    <Compile Include="Services\DatabaseService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -11,7 +11,7 @@ namespace GPF.Domain.Services.Sandbox
             return true;
         }
 
-        public bool Login(Account account)
+        public bool Login(string username, string password)
         {
             return true;
         }
@@ -26,8 +26,9 @@ namespace GPF.Domain.Services.Sandbox
             return true;
         }
 
-        public Account GetAccount(Account account)
+        public Account GetAccount(int accountId)
         {
+            Account account = new Account();
             account = new Account();
             account.Id = 93215556;
             account.Username = "johnsmith@email.com";
@@ -43,6 +44,11 @@ namespace GPF.Domain.Services.Sandbox
             account.ClassHistory = null;
 
             return account;
+        }
+
+        public Account GetAccount(string username)
+        {
+            return null;
         }
 
         public List<Account> GetAccounts()
@@ -85,6 +91,16 @@ namespace GPF.Domain.Services.Sandbox
         public List<Account> GetAccountsByRole(AccountRole role)
         {
             return null;
+        }
+
+        public bool AddCourseToHistory(Account account, int courseId)
+        {
+            return true;
+        }
+
+        public bool RemoveCourseFromHistory(Account account, int courseId)
+        {
+            return true;
         }
     }
 }

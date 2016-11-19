@@ -13,13 +13,15 @@ namespace GPF.Web.Controllers
     {
         IAccountService _accountService;
         IDegreeService _degreeService;
-        IClassOfferingService _classOfferingService;
+        ICourseService _courseService;
+        IGPFService _gpfService;
 
-        public AccountController(IAccountService accountService, IDegreeService degreeService, IClassOfferingService classOfferingService)
+        public AccountController(IAccountService accountService, IDegreeService degreeService, ICourseService courseService, IGPFService gpfService)
         {
             _accountService = accountService;
             _degreeService = degreeService;
-            _classOfferingService = classOfferingService;
+            _courseService = courseService;
+            _gpfService = gpfService;
         }
 
         public ActionResult Index()
@@ -39,7 +41,7 @@ namespace GPF.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (_accountService.Login(account))
+                if (_accountService.Login(account.Username, account.Password))
                 {
                     FormsAuthentication.SetAuthCookie(account.Username, account.RememberMe);
                     return RedirectToAction("Edit", "Account");
@@ -70,14 +72,11 @@ namespace GPF.Web.Controllers
         [HttpPost]
         public ActionResult Register(Account account)
         {
-            /*
-                TODO: Add opt-in responsibilities, agreements.
-            */
             if (ModelState.IsValid)
             {
                 if (_accountService.Register(account))
                 {
-                    if (_accountService.Login(account))
+                    if (_accountService.Login(account.Username, account.Password))
                     {
                         FormsAuthentication.SetAuthCookie(account.Username, false);
                         return RedirectToAction("Edit", "Account");
@@ -110,6 +109,11 @@ namespace GPF.Web.Controllers
             List<Degree> availableDegrees = new List<Degree>();
             availableDegrees = _degreeService.GetDegrees();
 
+            if (account.Degree == null || account.Degree.Id <= 0)
+                account.Degree = availableDegrees[0];
+            if (account.Concentration == null || account.Concentration.Id <= 0)
+                account.Concentration = availableDegrees[0].Concentrations[0];
+
             AccountViewModel model = new AccountViewModel
             {
                 Account = account,
@@ -124,6 +128,7 @@ namespace GPF.Web.Controllers
         public ActionResult Edit(AccountViewModel viewModel)
         {
             Account account = viewModel.Account;
+
             if (ModelState.IsValid)
             {
                 if (_accountService.Update(account))
@@ -176,15 +181,30 @@ namespace GPF.Web.Controllers
             else if (account.Role != AccountRole.Administrator)
                 return RedirectToAction("Edit", "Account");
 
-            List<Account> studentAccounts = new List<Account>();
-            studentAccounts = _accountService.GetAccounts();
+            List<Account> accounts = _accountService.GetAccounts();
+            List<Course> courses = _courseService.GetCourses();
+            List<Degree> degrees = _degreeService.GetDegrees();
+            List<Concentration> concentrations = _degreeService.GetConcentrationsByDegreeId(0);
 
-            studentAccounts.FindAll(x => x.Role == AccountRole.Student);
+            /** Display if necessary:
+                List<Course> degreeRequirements = _courseService.GetCoursesRequiredByDegree(0);
+                List<Course> coursePrerequisites = _courseService.GetCoursePrereqs(0);
+                List<Course> concentrationCourses = _courseService.GetCoursesByConcentration(0);
+            */
 
-            AccountViewModel model = new AccountViewModel
+            List<GPFSession> sessions = _gpfService.GetSessions();
+
+            DataViewModel model = new DataViewModel
             {
                 Account = account,
-                StudentAccounts = studentAccounts
+                Accounts = accounts,
+                Courses = courses,
+                Degrees = degrees,
+                Concentrations = concentrations,
+                //DegreeRequirements = degreeRequirements,
+                //CoursePrerequisites = coursePrerequisites,
+                //ConcentrationCourses = concentrationCourses,
+                GPFSessions = sessions
             };
 
             return View(model);
@@ -198,7 +218,7 @@ namespace GPF.Web.Controllers
             else if (account.Role == AccountRole.Student)
                 return RedirectToAction("Edit", "Account");
 
-            Account studentAccount = _accountService.GetAccount(new Account() { Id = id });
+            Account studentAccount = _accountService.GetAccount(id);
 
             if (studentAccount != null)
             {
@@ -224,12 +244,12 @@ namespace GPF.Web.Controllers
             if (impersonateAccount != null)
                 account = impersonateAccount;
 
-            List<ClassOffering> classHistory = _classOfferingService.GetClassHistory(account);
+            List<Course> courseHistory = _courseService.GetCourseHistory(account.Id);
 
             AccountViewModel model = new AccountViewModel
             {
                 Account = account,
-                ClassHistory = classHistory,
+                CourseHistory = courseHistory,
                 Impersonating = (impersonateAccount != null)
             };
 
@@ -238,13 +258,29 @@ namespace GPF.Web.Controllers
 
         public ActionResult GPFHistory()
         {
-            //placeholder for GPF history display page.
-            return View();
+            Account account = GetAuthCookieAccount();
+            if (account == null)
+                return RedirectToAction("Login", "Account");
+
+            Account impersonateAccount = Statics.ImpersonateGet(Session);
+            if (impersonateAccount != null)
+                account = impersonateAccount;
+
+            List<GPFSession> gpfSessions = _gpfService.GetSessionsByAccountId(account.Id);
+
+            AccountViewModel model = new AccountViewModel
+            {
+                Account = account,
+                SavedSessions = gpfSessions,
+                Impersonating = (impersonateAccount != null)
+            };
+
+            return View(model);
         }
 
         public ActionResult FillConcentrationList(int id)
         {
-            Degree degree = _degreeService.GetDegreeById(new Degree { Id = id });
+            Degree degree = _degreeService.GetDegreeById(id);
             return Json(degree.Concentrations, JsonRequestBehavior.AllowGet);
         }
 
@@ -256,7 +292,14 @@ namespace GPF.Web.Controllers
                 if (!string.IsNullOrWhiteSpace(username))
                 {
                     Account account = new Account() { Username = username };
-                    account = _accountService.GetAccount(account);
+                    account = _accountService.GetAccount(account.Username);
+
+                    if (account == null || account.Id <= 0)
+                    {
+                        Statics.KillCookie(Request);
+                        return null;
+                    }
+
                     return account;
                 }
             }
@@ -270,6 +313,26 @@ namespace GPF.Web.Controllers
             }
 
             return null;
+        }
+
+        public ActionResult RemoveCourseFromHistory(int? id)
+        {
+            Account account = GetAuthCookieAccount();
+            if (account == null)
+                return RedirectToAction("Login", "Account");
+            else if (account.Role == AccountRole.Student)
+                return RedirectToAction("Edit", "Account");
+
+            Account impersonateAccount = Statics.ImpersonateGet(Session);
+            if (impersonateAccount != null)
+                account = impersonateAccount;
+
+            if (id.HasValue)
+            {
+                _accountService.RemoveCourseFromHistory(account, id.Value);
+            }
+
+            return RedirectToAction("ClassHistory", "Account");
         }
     }
 }

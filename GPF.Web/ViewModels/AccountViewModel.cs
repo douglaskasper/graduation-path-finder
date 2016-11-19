@@ -5,10 +5,11 @@ namespace GPF.Web.ViewModels
 {
     public class AccountViewModel
     {
-        public Account Account;
-        public List<Degree> AvailableDegrees;
-        public List<Account> StudentAccounts;
+        public Account Account { get; set; }
+        public List<Degree> AvailableDegrees { get; set; }
+        public List<Account> StudentAccounts { get; set; }
         public bool Impersonating { get; set; }
-        public List<ClassOffering> ClassHistory { get; set; }
+        public List<GPFSession> SavedSessions { get; set; }
+        public List<Course> CourseHistory { get; set; }
     }
 }

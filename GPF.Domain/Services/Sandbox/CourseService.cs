@@ -7,7 +7,7 @@ namespace GPF.Domain.Services.Sandbox
 {
     public class CourseService : ICourseService
     {
-        public Course GetCoursesById(Course course)
+        public Course GetCoursesById(int courseId)
         {
             return null;
         }
@@ -51,12 +51,17 @@ namespace GPF.Domain.Services.Sandbox
             return courses;
         }
 
-        public List<Course> GetCoursesRequiredByDegree(Degree degree)
+        public List<Course> GetCoursePrereqs(int courseId)
         {
             return null;
         }
 
-        public List<Course> GetCoursesByConcentration(Concentration concentration)
+        public List<Course> GetCoursesRequiredByDegree(int degreeId)
+        {
+            return null;
+        }
+
+        public List<Course> GetCoursesByConcentration(int concentrationId)
         {
             List<Course> courses = new List<Course>();
 
@@ -95,7 +100,7 @@ namespace GPF.Domain.Services.Sandbox
             return courses;
         }
 
-        public List<Course> GetAllElectivesByConcentration(Concentration excludeConcentration)
+        public List<Course> GetAllElectivesByConcentration(int excludeConcentrationId)
         {
             List<Course> courses = new List<Course>();
 
@@ -132,6 +137,11 @@ namespace GPF.Domain.Services.Sandbox
             courses.Add(course);
 
             return courses;
+        }
+
+        public List<Course> GetCourseHistory(int accountId)
+        {
+            return null;
         }
     }
 }

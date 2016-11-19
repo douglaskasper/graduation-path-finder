@@ -45,9 +45,10 @@
 <div class="row">
     <div class="col-xs-12">
         <h3 class="page-header">
-            Degrees
+            Degrees 
             @(Model.SearchId > 0 ? " ID = '" + Model.SearchId.ToString() + "'" : "")
             @(!string.IsNullOrWhiteSpace(Model.SearchTitle) ? " Title includes '" + Model.SearchTitle + "'" : "")
+            / @Html.ActionLink("Courses", "Courses", "Catalog")
         </h3>
 
         @foreach (var degree in Model.Degrees)

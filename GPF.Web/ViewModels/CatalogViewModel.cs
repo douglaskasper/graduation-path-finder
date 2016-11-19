@@ -10,5 +10,8 @@ namespace GPF.Web.ViewModels
 
         public int SearchId { get; set; }
         public string SearchTitle { get; set; }
+
+        public Account ActingAccount;
+        public AccountRole AccountLoggedInRole { get; set; }
     }
 }

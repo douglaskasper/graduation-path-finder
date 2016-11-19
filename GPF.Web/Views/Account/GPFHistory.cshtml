@@ -1,7 +1,92 @@
-﻿
+﻿@model GPF.Web.ViewModels.AccountViewModel
+
 @{
     ViewBag.Title = "GPFHistory";
 }
 
-<h2>GPFHistory</h2>
+<div class="page-header">
+    <h2>@Model.Account.FirstName @Model.Account.LastName, @Model.Account.Role.Description</h2>
+</div>
 
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-account" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Account", "Edit", "Account", new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div id="navbar-account" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("Edit", "Edit", "Account")</li>
+                <li>@Html.ActionLink("Class History", "ClassHistory", "Account")</li>
+                <li>@Html.ActionLink("GPF History", "GPFHistory", "Account")</li>
+                @if (Model.Account.Role.Value == "F".ToString() || Model.Account.Role.Value == "A".ToString())
+                {
+                    <li>@Html.ActionLink("Students", "Students", "Account")</li>
+                }
+                @if (Model.Account.Role.Value == "A".ToString())
+                {
+                    <li>@Html.ActionLink("Data View", "DataView", "Account")</li>
+                }
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+<h4>GPF History</h4>
+
+@if (Model.Impersonating)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>
+            Impersonating Account @GPF.Web.Lib.Statics.ImpersonateGet(Session).Id
+            @Html.ActionLink("Stop Impersonation", "ImpersonateStop", "Account")
+        </p>
+    </div>
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Past Sessions</th>
+                    <!--<th>Term</th>-->
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.SavedSessions != null && Model.SavedSessions.Count > 0)
+                {
+                    foreach (var session in Model.SavedSessions)
+                    {
+                        <tr>
+                            <td>
+                                <a href="../GPF/Options/@session.Id">
+                                    ID: @session.Id |
+                                    Degree ID: @session.Degree.Id |
+                                    Concentration ID: @session.Concentration.Id |
+                                    Entering Year: @session.EnteringTerm.Year |
+                                    Entering Quarter: @session.EnteringTerm.Quarter.Description |
+                                    Classes Per Quarter: @session.ClassesPerQuarter |
+                                    Delivery: @session.ClassDeliveryOption.Description
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            No GPF history found.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

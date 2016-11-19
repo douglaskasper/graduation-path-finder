@@ -40,13 +40,13 @@ namespace GPF.Web.Controllers
             GPFSession gpfSession = new GPFSession();
             if (id.HasValue)
             {
-                 gpfSession = _gpfService.GetSessionById(new GPFSession() { Id = id.Value });
+                gpfSession = _gpfService.GetSessionById(id.Value);
             }
 
             List<Degree> availableDegrees = new List<Degree>();
             availableDegrees = _degreeService.GetDegrees();
 
-            if (account != null)
+            if (account != null && account.Id > 0)
             {
                 gpfSession.Account = account;
                 gpfSession.Degree = (gpfSession.Degree == null) ? account.Degree : gpfSession.Degree;
@@ -61,11 +61,11 @@ namespace GPF.Web.Controllers
 
             List<Course> availableConcentrationCourses = new List<Course>();
             if (gpfSession.Degree != null)
-                availableConcentrationCourses = _courseService.GetCoursesByConcentration(gpfSession.Concentration);
+                availableConcentrationCourses = _courseService.GetCoursesByConcentration(gpfSession.Concentration.Id);
 
             List<Course> availableElectiveCourses = new List<Course>();
             if (gpfSession.Degree != null && gpfSession.Concentration != null)
-                availableElectiveCourses = _courseService.GetAllElectivesByConcentration(gpfSession.Concentration);
+                availableElectiveCourses = _courseService.GetAllElectivesByConcentration(gpfSession.Concentration.Id);
 
             GPFViewModel model = new GPFViewModel()
             {
@@ -76,15 +76,20 @@ namespace GPF.Web.Controllers
                 Impersonating = (impersonateAccount != null)
             };
 
+            if (id.HasValue)
+            {
+                model.EnteringYear = gpfSession.EnteringTerm.Year;
+                model.EnteringQuarter = gpfSession.EnteringTerm.Quarter.Value;
+                model.ClassesPerQuarter = gpfSession.ClassesPerQuarter;
+                model.ClassDeliveryOption = gpfSession.ClassDeliveryOption.Value;
+            }
+
             return View(model);
         }
 
         [HttpPost]
         public ActionResult Options(GPFViewModel viewModel)
         {
-            /*
-                TODO: Redirect to scheduled path. Save search options if logged in.
-            */
             GPFSession session = viewModel.GPFSession;
             session.EnteringTerm = new AcademicTerm(viewModel.EnteringYear, viewModel.EnteringQuarter);
             session.ClassesPerQuarter = viewModel.ClassesPerQuarter;
@@ -105,7 +110,16 @@ namespace GPF.Web.Controllers
                     session.ElectiveCoursesSelected.Add(new Course() { Id = courseId });
             }
 
-            _gpfService.SaveSession(session);
+            Account account = GetAuthCookieAccount();
+            Account impersonateAccount = Statics.ImpersonateGet(Session);
+            if (impersonateAccount != null)
+                account = impersonateAccount;
+
+            if(account != null && account.Id > 0)
+            {
+                session.Account = account;
+                _gpfService.SaveSession(session);
+            }
 
             TempData["GPFSession"] = session;
             return RedirectToAction("Schedule", "GPF");
@@ -113,15 +127,11 @@ namespace GPF.Web.Controllers
 
         public ActionResult Schedule()
         {
-            /*
-                TODO: Use service to return list of classes to graduation, display classes.
-                    This could be interactive, to choose courses when options are available under a certain quarter.
-            */
             GPFSession session = (GPFSession)TempData["GPFSession"];
             if (session == null)
                 return RedirectToAction("Options", "GPF");
 
-            session.Degree = _degreeService.GetDegreeById(session.Degree);
+            session.Degree = _degreeService.GetDegreeById(session.Degree.Id);
             session.Concentration = session.Degree.Concentrations.Find(x => x.Id == session.Concentration.Id);
             GPFSchedule schedule = _gpfService.GetSessionSchedule(session);
 
@@ -135,33 +145,40 @@ namespace GPF.Web.Controllers
 
         public ActionResult FillConcentrationList(int id)
         {
-            Degree degree = _degreeService.GetDegreeById(new Degree { Id = id });
+            Degree degree = _degreeService.GetDegreeById(id);
             return Json(degree.Concentrations, JsonRequestBehavior.AllowGet);
         }
         
         public ActionResult FillConcentrationCourseList(int id)
         {
             List<Course> courses = new List<Course>();
-            courses = _courseService.GetCoursesByConcentration(new Concentration { Id = id });
+            courses = _courseService.GetCoursesByConcentration(id);
             return Json(courses, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult FillElectiveCourseList(int id)
         {
             List<Course> courses = new List<Course>();
-            courses = _courseService.GetAllElectivesByConcentration(new Concentration { Id = id });
+            courses = _courseService.GetAllElectivesByConcentration(id);
             return Json(courses, JsonRequestBehavior.AllowGet);
         }
 
         public Account GetAuthCookieAccount()
         {
-            if (Statics.HasAuthCookie(Request))
+            if (Lib.Statics.HasAuthCookie(Request))
             {
                 string username = GetAuthCookieUsername();
                 if (!string.IsNullOrWhiteSpace(username))
                 {
                     Account account = new Account() { Username = username };
-                    account = _accountService.GetAccount(account);
+                    account = _accountService.GetAccount(account.Username);
+
+                    if (account == null || account.Id <= 0)
+                    {
+                        Statics.KillCookie(Request);
+                        return null;
+                    }
+
                     return account;
                 }
             }

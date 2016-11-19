@@ -5,10 +5,12 @@ namespace GPF.Domain.Contracts.IServices
 {
     public interface ICourseService
     {
-        Course GetCoursesById(Course course);
+        Course GetCoursesById(int courseId);
         List<Course> GetCourses();
-        List<Course> GetCoursesRequiredByDegree(Degree degree);
-        List<Course> GetCoursesByConcentration(Concentration concentration);
-        List<Course> GetAllElectivesByConcentration(Concentration excludeConcentration);
+        List<Course> GetCoursePrereqs(int courseId);
+        List<Course> GetCoursesRequiredByDegree(int degreeId);
+        List<Course> GetCoursesByConcentration(int concentrationId);
+        List<Course> GetAllElectivesByConcentration(int excludeConcentrationId);
+        List<Course> GetCourseHistory(int accountId);
     }
 }

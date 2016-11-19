@@ -7,6 +7,9 @@ namespace GPF.Domain.Services
 {
     public class ClassOfferingService : IClassOfferingService
     {
+        /**
+            Deprecated.
+        */
         public ClassOffering GetClassById(ClassOffering classOffering)
         {
             return null;

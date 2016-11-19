@@ -6,8 +6,9 @@ namespace GPF.Domain.Services.Sandbox
 {
     public class DegreeService : IDegreeService
     {
-        public Degree GetDegreeById(Degree degree)
+        public Degree GetDegreeById(int degreeId)
         {
+            Degree degree = new Degree();
             if (degree.Id == 1)
             {
                 degree = new Degree();
@@ -131,7 +132,7 @@ namespace GPF.Domain.Services.Sandbox
             return degrees;
         }
 
-        public List<Degree> GetDegreesByCollege(Degree degree)
+        public List<Concentration> GetConcentrationsByDegreeId(int degreeId)
         {
             return null;
         }

@@ -45,9 +45,10 @@
 <div class="row">
     <div class="col-xs-12">
         <h3 class="page-header">
-            Courses
-            @(Model.SearchId > 0 ? " ID = '" + Model.SearchId.ToString() + "'" : "")
+            Courses 
+            @(Model.SearchId > 0 ? " Number = '" + Model.SearchId.ToString() + "'" : "")
             @(!string.IsNullOrWhiteSpace(Model.SearchTitle) ? " Title includes '" + Model.SearchTitle + "'" : "")
+            / @Html.ActionLink("Degrees", "Degrees", "Catalog")
         </h3>
 
         @foreach (var course in Model.Courses)
@@ -63,17 +64,25 @@
                         <div id="course-@course.Id" class="panel-body in">
                             <p>@course.Description</p>
 
-                            <div class="well">
-                                <p>Concentrations:</p>
-                                <ul>
-                                    @foreach (var prereq in course.Prerequisites)
-                                    {
-                                        <li>
-                                            @prereq.Title
-                                        </li>
-                                    }
-                                </ul>
-                            </div>
+                            @if (course.Prerequisites.Count > 0)
+                            {
+                                <div class="well">
+                                    <p>Concentrations:</p>
+                                    <ul>
+                                        @foreach (var prereq in course.Prerequisites)
+                                        {
+                                            <li>
+                                                @prereq.Title
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+
+                            @if (Model.AccountLoggedInRole != null && Model.AccountLoggedInRole.Value != "S" && Model.ActingAccount != null && Model.ActingAccount.Id > 0)
+                            {
+                                <a href="../Catalog/AddCourseToHistory/@course.Id">Add Course To History</a>
+                            }
                         </div>
                     </div>
                 </div>

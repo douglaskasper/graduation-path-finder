@@ -55,23 +55,28 @@
             <thead>
                 <tr>
                     <th>Course</th>
-                    <th>Term</th>
+                    @if (Model.Account.Role.Value != "S".ToString())
+                    {
+                    <th>Action</th>
+                    }
                 </tr>
             </thead>
             <tbody>
-                @if (Model.ClassHistory != null)
+                @if (Model.CourseHistory != null && Model.CourseHistory.Count > 0)
                 {
-                    foreach (var classOffering in Model.ClassHistory)
+                    foreach (var course in Model.CourseHistory)
                     {
                         <tr>
                             <td>
-                                @classOffering.Course.Department
-                                @classOffering.Course.Number
+                                @course.Department
+                                @course.Number
                             </td>
+                            @if (Model.Account.Role.Value != "S".ToString())
+                            {
                             <td>
-                                @classOffering.AcademicTerm.Quarter.Description
-                                @classOffering.AcademicTerm.Year
+                                <a href="../Account/RemoveCourseFromHistory/@course.Id">Remove</a>
                             </td>
+                            }
                         </tr>
                     }
                 }

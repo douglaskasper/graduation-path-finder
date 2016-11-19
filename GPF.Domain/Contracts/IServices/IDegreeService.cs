@@ -5,8 +5,8 @@ namespace GPF.Domain.Contracts.IServices
 {
     public interface IDegreeService
     {
-        Degree GetDegreeById(Degree degree);
+        Degree GetDegreeById(int degreeId);
         List<Degree> GetDegrees();
-        List<Degree> GetDegreesByCollege(Degree degree);
+        List<Concentration> GetConcentrationsByDegreeId(int degreeId);
     }
 }

@@ -11,7 +11,7 @@ namespace GPF.Domain.Services.Sandbox
             return true;
         }
 
-        public GPFSession GetSessionById(GPFSession session)
+        public GPFSession GetSessionById(int sessionId)
         {
             return null;
         }
@@ -21,7 +21,7 @@ namespace GPF.Domain.Services.Sandbox
             return null;
         }
 
-        public List<GPFSession> GetSessionsByAccountId(Account account)
+        public List<GPFSession> GetSessionsByAccountId(int accountId)
         {
             return null;
         }

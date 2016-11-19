@@ -8,6 +8,8 @@
     <h2>@ViewBag.Title</h2>
 </div>
 
+@if (Model.GPFSchedule != null)
+{
 <div class="row">
     @foreach (var term in Model.GPFSchedule.Terms)
     {
@@ -28,9 +30,10 @@
         </div>
     }
 </div>
+}
 
 <div class="well">
-    <p>GPF Session ID: @Model.GPFSession.Id</p>
+    <!--<p>GPF Session ID: Model.GPFSession.Id</p>-->
     @if (Model.GPFSession.Account != null && Model.GPFSession.Account.Id > 0)
     {
         <p>Account ID: @Model.GPFSession.Account.Id</p>
@@ -95,7 +98,7 @@
 
             @if (GPF.Web.Lib.Statics.HasAuthCookie(Request))
             {
-                @Html.ActionLink("View Saved GPF Sessions", "GPFSessions", "Account", null, new { @class = "btn btn-default" })
+                @Html.ActionLink("View Saved GPF Sessions", "GPFHistory", "Account", null, new { @class = "btn btn-default" })
             }
         </p>
     </div>
