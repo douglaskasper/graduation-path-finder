@@ -20,7 +20,6 @@ namespace GPF.Domain.Services
 
         public DatabaseService()
         {
-            Open();
         }
 
         private SqlConnection Open()
