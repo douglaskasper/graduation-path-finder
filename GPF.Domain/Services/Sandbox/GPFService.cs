@@ -28,7 +28,7 @@ namespace GPF.Domain.Services.Sandbox
 
         public GPFSchedule GetSessionSchedule(GPFSession session)
         {
-            GPFSchedule schedule = new GPFSchedule();
+            GPFSchedule schedule = new GPFSchedule(session, new List<Course>());
 
             ClassOffering classToSchedule = new ClassOffering();
             classToSchedule.Id = 219849;

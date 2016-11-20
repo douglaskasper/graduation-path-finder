@@ -162,8 +162,30 @@ namespace GPF.Domain.Services
 
         public GPFSchedule GetSessionSchedule(GPFSession session)
         {
-            // Entry point to algorithm that returns path to graduation.
-            return null;
+            
+            //add major courses based on session
+            CourseService crsServ = new CourseService();
+            List<Course> majorCourses = crsServ.GetCoursesRequiredByDegree(session.Degree.Id);
+            //populate course ids list from session
+            List<Course> courseids = new List<Course>(session.ConcentrationCoursesSelected.Count + session.ElectiveCoursesSelected.Count + majorCourses.Count);
+            courseids.AddRange(majorCourses);
+            courseids.AddRange(session.ConcentrationCoursesSelected);
+            courseids.AddRange(session.ElectiveCoursesSelected);
+            //list of full course objects
+            List<Course> courses = new List<Course>(courseids.Count);
+            //Convert each course from an id to a full course object
+            foreach (Course course in courseids)
+            {
+                courses.Add(crsServ.GetCoursesById(course.Id));
+            }
+            //sort courses using tree
+            CourseTree tree = new CourseTree(courses);
+            List<Course> sortedCourses = tree.GetList();
+            //get class history
+            List<Course> taken = crsServ.GetCourseHistory(session.Account.Id);
+            GPFSchedule schedule = new GPFSchedule(session, sortedCourses, taken);
+
+            return schedule;
         }
     }
 }

@@ -58,6 +58,8 @@
     <Compile Include="Models\ClassStatus.cs" />
     <Compile Include="Models\Concentration.cs" />
     <Compile Include="Models\Course.cs" />
+    <Compile Include="Models\CourseTree.cs" />
+    <Compile Include="Models\CourseTreeNode.cs" />
     <Compile Include="Models\Degree.cs" />
     <Compile Include="Models\GPFSchedule.cs" />
     <Compile Include="Models\GPFSession.cs" />

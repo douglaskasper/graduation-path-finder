@@ -11,7 +11,7 @@ namespace GPF.Domain.Models
             get { return Quarter.Description + " " + Year.ToString(); }
         }
 
-        public List<ClassOffering> ClassSchedule { get; set; }
+        public List<Course> ClassSchedule { get; set; }
 
         public AcademicTerm()
         {
@@ -20,12 +20,33 @@ namespace GPF.Domain.Models
         {
             Year = year;
             Quarter = Quarter.GetQuarter(quarter);
-            ClassSchedule = new List<ClassOffering>();
+            ClassSchedule = new List<Course>();
         }
 
         public bool Equals(AcademicTerm term)
         {
             return (Year == term.Year && Quarter.Value == term.Quarter.Value);
+        }
+
+	public AcademicTerm nextTerm()
+        {
+            AcademicTerm next;
+            switch (Quarter.Value)
+            {
+                case "Fall":
+                    next = new AcademicTerm(Year, "Winter");
+                    break;
+                case "Winter":
+                    next = new AcademicTerm(Year, "Spring");
+                    break;
+                case "Spring":
+                    next = new AcademicTerm(Year + 1, "Fall");
+                    break;
+                default:
+                    next = this;
+                    break;
+            }
+            return next;
         }
     }
 }
