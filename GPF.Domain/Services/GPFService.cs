@@ -181,7 +181,9 @@ namespace GPF.Domain.Services
             //sort courses using tree
             CourseTree tree = new CourseTree(courses);
             List<Course> sortedCourses = tree.GetList();
-            GPFSchedule schedule = new GPFSchedule(session, sortedCourses);
+            //get class history
+            List<Course> taken = crsServ.GetCourseHistory(session.Account.Id);
+            GPFSchedule schedule = new GPFSchedule(session, sortedCourses, taken);
 
             return schedule;
         }

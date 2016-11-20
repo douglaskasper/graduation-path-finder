@@ -11,9 +11,16 @@ namespace GPF.Domain.Models
         public List<Course> coursesTaken;
         public ClassOfferingService classService = new ClassOfferingService();
         List<Course> toAdd;
+        decimal hours;
 
-        public GPFSchedule(GPFSession session, List<Course> courses)
+        public GPFSchedule(GPFSession session, List<Course> courses, List<Course> taken)
         {
+            //get courses and hours already taken
+            foreach (Course course in taken)
+            {
+                coursesTaken.Add(course);
+                hours += course.Units;
+            }
             Terms = new List<AcademicTerm>();
             //create entering term
             currentTerm = session.EnteringTerm;
@@ -50,6 +57,10 @@ namespace GPF.Domain.Models
                 loopCount = 0;
                 termCount += 1;
             }
+            if (hours < 48)
+            {
+                //more hours needed for degree, display this somewhere or add random classes
+            }
         }
 
         public bool AddClass(Course course, AcademicTerm term)
@@ -59,13 +70,8 @@ namespace GPF.Domain.Models
             {
                 if (!coursesTaken.Contains(pre)) return false;
             }
-            //attempt to find a class offering in the specified quarter
-            ClassOffering offering = classService.GetClassInTerm(course, term);
-            //offering is null if no class is found
-            if (offering == null) return false;
-            //otherwise add to taken list and current term, and remove from toAdd
             AddCourseTaken(course);
-            currentTerm.ClassSchedule.Add(offering);
+            currentTerm.ClassSchedule.Add(course);
             toAdd.Remove(course);
             return true; //if it was able to add
         }

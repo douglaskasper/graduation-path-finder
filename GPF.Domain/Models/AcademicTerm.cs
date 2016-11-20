@@ -11,7 +11,7 @@ namespace GPF.Domain.Models
             get { return Quarter.Description + " " + Year.ToString(); }
         }
 
-        public List<ClassOffering> ClassSchedule { get; set; }
+        public List<Course> ClassSchedule { get; set; }
 
         public AcademicTerm()
         {
@@ -20,7 +20,7 @@ namespace GPF.Domain.Models
         {
             Year = year;
             Quarter = Quarter.GetQuarter(quarter);
-            ClassSchedule = new List<ClassOffering>();
+            ClassSchedule = new List<Course>();
         }
 
         public bool Equals(AcademicTerm term)
