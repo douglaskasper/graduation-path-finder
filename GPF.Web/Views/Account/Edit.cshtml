@@ -26,7 +26,7 @@
                 <li>@Html.ActionLink("GPF History", "GPFHistory", "Account")</li>
                 @if (Model.Account.Role.Value == "F".ToString() || Model.Account.Role.Value == "A".ToString())
                 {
-                    <li>@Html.ActionLink("Students", "Students", "Account")</li>
+                    <li>@Html.ActionLink("Other Accounts", "Students", "Account")</li>
                 }
                 @if (Model.Account.Role.Value == "A".ToString())
                 {
@@ -49,7 +49,7 @@
             {
                 <div class="alert alert-danger" role="alert">
                     <p>
-                        <strong>Impersonating Account</strong> @GPF.Web.Lib.Statics.ImpersonateGet(Session).Id
+                        Impersonating Account @GPF.Web.Lib.Statics.ImpersonateGet(Session).Id
                         @Html.ActionLink("Stop Impersonation", "ImpersonateStop", "Account")
                     </p>
                 </div>

@@ -58,6 +58,7 @@ namespace GPF.Web.Controllers
         public ActionResult Logout()
         {
             Statics.ImpersonateStop(Session);
+            Statics.KillCookie(Request);
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");
         }
@@ -159,15 +160,23 @@ namespace GPF.Web.Controllers
             else if (account.Role == AccountRole.Student)
                 return RedirectToAction("Edit", "Account");
 
-            List<Account> studentAccounts = new List<Account>();
-            studentAccounts = _accountService.GetAccounts();
+            List<Account> accounts = new List<Account>();
+            accounts = _accountService.GetAccounts();
 
-            studentAccounts.FindAll(x => x.Role == AccountRole.Student);
+            List<Account> studentAccounts = new List<Account>();
+            studentAccounts = accounts.FindAll(x => x.Role == AccountRole.Student);
+
+            List<Account> elevatedAccounts = new List<Account>();
+            if (account.Role == AccountRole.Administrator)
+                elevatedAccounts = accounts.FindAll(x => x.Role != AccountRole.Student);
+            else
+                elevatedAccounts = null;
 
             AccountViewModel model = new AccountViewModel
             {
                 Account = account,
-                StudentAccounts = studentAccounts
+                StudentAccounts = studentAccounts,
+                ElevatedAccounts = elevatedAccounts
             };
 
             return View(model);
@@ -239,6 +248,9 @@ namespace GPF.Web.Controllers
             Account account = GetAuthCookieAccount();
             if (account == null)
                 return RedirectToAction("Login", "Account");
+            AccountRole userAccountRole = null;
+            if (account != null && account.Id > 0)
+                userAccountRole = account.Role;
 
             Account impersonateAccount = Statics.ImpersonateGet(Session);
             if (impersonateAccount != null)
@@ -250,7 +262,8 @@ namespace GPF.Web.Controllers
             {
                 Account = account,
                 CourseHistory = courseHistory,
-                Impersonating = (impersonateAccount != null)
+                Impersonating = (impersonateAccount != null),
+                UserAccountRole = userAccountRole
             };
 
             return View(model);
@@ -333,6 +346,63 @@ namespace GPF.Web.Controllers
             }
 
             return RedirectToAction("ClassHistory", "Account");
+        }
+
+        public ActionResult ElevateToAdmin(int id)
+        {
+            Account account = GetAuthCookieAccount();
+            if (account == null)
+                return RedirectToAction("Login", "Account");
+            else if (account.Role == AccountRole.Student)
+                return RedirectToAction("Edit", "Account");
+
+            Account elevateAccount = _accountService.GetAccount(id);
+
+            if (elevateAccount != null)
+            {
+                elevateAccount.Role = AccountRole.Administrator;
+                _accountService.Update(elevateAccount);
+            }
+
+            return RedirectToAction("Students", "Account");
+        }
+
+        public ActionResult ElevateToFaculty(int id)
+        {
+            Account account = GetAuthCookieAccount();
+            if (account == null)
+                return RedirectToAction("Login", "Account");
+            else if (account.Role == AccountRole.Student)
+                return RedirectToAction("Edit", "Account");
+
+            Account elevateAccount = _accountService.GetAccount(id);
+
+            if (elevateAccount != null)
+            {
+                elevateAccount.Role = AccountRole.Faculty;
+                _accountService.Update(elevateAccount);
+            }
+
+            return RedirectToAction("Students", "Account");
+        }
+
+        public ActionResult LowerToStudent(int id)
+        {
+            Account account = GetAuthCookieAccount();
+            if (account == null)
+                return RedirectToAction("Login", "Account");
+            else if (account.Role == AccountRole.Student)
+                return RedirectToAction("Edit", "Account");
+
+            Account elevateAccount = _accountService.GetAccount(id);
+
+            if (elevateAccount != null)
+            {
+                elevateAccount.Role = AccountRole.Student;
+                _accountService.Update(elevateAccount);
+            }
+
+            return RedirectToAction("Students", "Account");
         }
     }
 }

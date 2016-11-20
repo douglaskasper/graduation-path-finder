@@ -202,6 +202,8 @@ namespace GPF.Domain.Services
                 command += $" acc.acc_state = '{account.State}',";
             if (!String.IsNullOrWhiteSpace(account.Zip))
                 command += $" acc.acc_zip = '{account.Zip}',";
+            if (account.Role != null)
+                command += $" acc.acc_role = '{account.Role.Value}',";
             if (account.Degree != null)
                 command += $" acc.deg_id = '{account.Degree.Id}',";
             if (account.Concentration != null)

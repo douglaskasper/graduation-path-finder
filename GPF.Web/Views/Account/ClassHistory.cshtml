@@ -26,7 +26,7 @@
                 <li>@Html.ActionLink("GPF History", "GPFHistory", "Account")</li>
                 @if (Model.Account.Role.Value == "F".ToString() || Model.Account.Role.Value == "A".ToString())
                 {
-                    <li>@Html.ActionLink("Students", "Students", "Account")</li>
+                    <li>@Html.ActionLink("Other Accounts", "Students", "Account")</li>
                 }
                 @if (Model.Account.Role.Value == "A".ToString())
                 {
@@ -55,7 +55,7 @@
             <thead>
                 <tr>
                     <th>Course</th>
-                    @if (Model.Account.Role.Value != "S".ToString())
+                    @if (Model.UserAccountRole.Value != "S".ToString())
                     {
                     <th>Action</th>
                     }
@@ -71,7 +71,7 @@
                                 @course.Department
                                 @course.Number
                             </td>
-                            @if (Model.Account.Role.Value != "S".ToString())
+                            @if (Model.UserAccountRole.Value != "S".ToString())
                             {
                             <td>
                                 <a href="../Account/RemoveCourseFromHistory/@course.Id">Remove</a>
