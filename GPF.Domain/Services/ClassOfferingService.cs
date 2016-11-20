@@ -34,5 +34,10 @@ namespace GPF.Domain.Services
         {
             return null;
         }
+
+        public ClassOffering GetClassInTerm(Course course, AcademicTerm term)
+        {
+            return null;
+        }
     }
 }
