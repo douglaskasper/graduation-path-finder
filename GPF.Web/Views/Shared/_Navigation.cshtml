@@ -40,7 +40,7 @@
             @(impersonateAccount.FirstName.ToString())
         </strong>
         <p>
-            Most data and actions will reflect on this student account.
+            Updates/actions will reflect on account @(impersonateAccount.Id.ToString()).
         </p>
         @Html.ActionLink("Stop Impersonation", "ImpersonateStop", "Account")
     </div>

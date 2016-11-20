@@ -11,5 +11,6 @@ namespace GPF.Web.ViewModels
         public bool Impersonating { get; set; }
         public List<GPFSession> SavedSessions { get; set; }
         public List<Course> CourseHistory { get; set; }
+        public AccountRole UserAccountRole { get; set; }
     }
 }

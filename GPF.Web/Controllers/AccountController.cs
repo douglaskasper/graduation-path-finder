@@ -239,6 +239,9 @@ namespace GPF.Web.Controllers
             Account account = GetAuthCookieAccount();
             if (account == null)
                 return RedirectToAction("Login", "Account");
+            AccountRole userAccountRole = null;
+            if (account != null && account.Id > 0)
+                userAccountRole = account.Role;
 
             Account impersonateAccount = Statics.ImpersonateGet(Session);
             if (impersonateAccount != null)
@@ -250,7 +253,8 @@ namespace GPF.Web.Controllers
             {
                 Account = account,
                 CourseHistory = courseHistory,
-                Impersonating = (impersonateAccount != null)
+                Impersonating = (impersonateAccount != null),
+                UserAccountRole = userAccountRole
             };
 
             return View(model);
