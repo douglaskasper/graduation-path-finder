@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 
 namespace GPF.Domain.Models
 {
-    public class Course
+    public class Course : IComparable
     {
         public int Id { get; set; }
         public int Number { get; set; }
@@ -20,5 +21,16 @@ namespace GPF.Domain.Models
 
         public List<Course> Prerequisites { get; set; }
         private List<ClassOffering> classesScheduled { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null) return 1;
+
+            Course other = obj as Course;
+            if (other != null)
+                return this.Id.CompareTo(other.Id);
+            else
+                throw new ArgumentException("Object is not a Course");
+        }
     }
 }
