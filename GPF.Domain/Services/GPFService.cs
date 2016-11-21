@@ -162,7 +162,7 @@ namespace GPF.Domain.Services
 
         public GPFSchedule GetSessionSchedule(GPFSession session)
         {
-            
+            decimal hours = 0;
             //add major courses based on session
             CourseService crsServ = new CourseService();
             List<Course> majorCourses = crsServ.GetCoursesRequiredByDegree(session.Degree.Id);
@@ -178,6 +178,28 @@ namespace GPF.Domain.Services
             {
                 courses.Add(crsServ.GetCoursesById(course.Id));
             }
+
+            //determine number of hours being taken
+            foreach (Course course in courses)
+            {
+                hours += course.Units;
+            }
+            //if less than 48 are being taken, add new concentration classes until at least 48 hours worth of classes are there
+            if (hours < 48)
+            {
+                int count = 0;
+                List<Course> extras = crsServ.GetCoursesByConcentration(session.Concentration.Id);
+                while (hours < 48)
+                {
+                    if (!courses.Contains(extras[count]))
+                    {
+                        courses.Add(extras[count]);
+                        hours += extras[count].Units;
+                    }
+                    count++;
+                }
+            }
+
             //sort courses using tree
             CourseTree tree = new CourseTree(courses);
             List<Course> sortedCourses = tree.GetList();

@@ -9,9 +9,9 @@ namespace GPF.Domain.Models
         public AcademicTerm currentTerm;
         //List of courses already added, to check for prereqs of future courses
         public List<Course> coursesTaken;
-        public ClassOfferingService classService = new ClassOfferingService();
+        public CourseService cServ = new CourseService();
         List<Course> toAdd;
-        decimal hours;
+        decimal hours = 0;
 
         public GPFSchedule(GPFSession session, List<Course> courses, List<Course> taken)
         {
@@ -56,10 +56,6 @@ namespace GPF.Domain.Models
                 currentTerm = currentTerm.nextTerm();
                 loopCount = 0;
                 termCount += 1;
-            }
-            if (hours < 48)
-            {
-                //more hours needed for degree, display this somewhere or add random classes
             }
         }
 
