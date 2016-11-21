@@ -25,7 +25,7 @@ namespace GPF.Domain.Models
             {
                 foreach (Course Course in SortedCourses.ToArray())
                 {
-                    if (Course.Prerequisites.Count == 0 || ContainsAllCourses(Course.Prerequisites)) {
+                    if (Course.Prerequisites == null || Course.Prerequisites.Count == 0 || ContainsAllCourses(Course.Prerequisites)) {
                         AddNode(new CourseTreeNode(this, Course));
                         Count += 1;
                         Courses.Add(Course.Id);

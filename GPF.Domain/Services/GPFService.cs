@@ -178,6 +178,10 @@ namespace GPF.Domain.Services
             {
                 courses.Add(crsServ.GetCoursesById(course.Id));
             }
+            foreach (Course course in courses)
+            {
+                course.Prerequisites = crsServ.GetCoursePrereqs(course.Id);
+            }
             //sort courses using tree
             CourseTree tree = new CourseTree(courses);
             List<Course> sortedCourses = tree.GetList();

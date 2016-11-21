@@ -15,6 +15,8 @@ namespace GPF.Domain.Models
 
         public GPFSchedule(GPFSession session, List<Course> courses, List<Course> taken)
         {
+            coursesTaken = new List<Course>();
+
             //get courses and hours already taken
             foreach (Course course in taken)
             {

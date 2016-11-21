@@ -124,15 +124,15 @@ namespace GPF.Domain.Services
             {
                 command =
                     CourseSelect() + $@"
-                    INNER JOIN dbo.tblCoursePrerequisite prq ON crs.crs_id = prq.crs_id
-                    WHERE crs.crs_id = '{courseId}'
+                    INNER JOIN dbo.tblCoursePrerequisite prq ON crs.crs_id = prq.prq_id
+                    WHERE prq.crs_id = {courseId}
                     ";
             }
             else
             {
                 command =
                     CourseSelect() + $@"
-                    INNER JOIN dbo.tblCoursePrerequisite prq ON crs.crs_id = prq.crs_id
+                    INNER JOIN dbo.tblCoursePrerequisite prq ON crs.crs_id = prq.prq_id
                     ";
             }
 
