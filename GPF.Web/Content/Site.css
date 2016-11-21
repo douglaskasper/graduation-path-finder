@@ -128,3 +128,9 @@ html {
     border-radius: 4px;
     white-space: normal;
 }
+
+@media (min-width: 768px) {
+    .term-box {
+        min-height:230px
+    }
+}
