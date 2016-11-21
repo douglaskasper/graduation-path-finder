@@ -55,14 +55,8 @@
                     <th>State</th>
                     <th>Zip</th>
                     <th>Role</th>
-                    @if (Model.Account.Degree != null)
-                    {
-                        <th>Degree ID</th>
-                    }
-                    @if (Model.Account.Concentration != null)
-                    {
-                        <th>Concentration ID</th>
-                    }
+                    <th>Degree ID</th>
+                    <th>Concentration ID</th>
                 </tr>
             </thead>
             <tbody>
@@ -101,18 +95,19 @@
                             <td>
                                 @account.Role.Description
                             </td>
-                            @if (Model.Account.Degree != null)
-                            {
+                            
                             <td>
-                                @account.Degree.Id
+                                @if (account.Degree != null)
+                                {
+                                    @account.Degree.Id
+                                }
                             </td>
-                            }
-                            @if (Model.Account.Concentration != null)
-                            {
                             <td>
-                                @account.Concentration.Id
+                                @if (account.Concentration != null)
+                                {
+                                    @account.Concentration.Id
+                                }
                             </td>
-                            }
                         </tr>
                     }
                 }
