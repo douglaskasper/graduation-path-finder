@@ -208,7 +208,7 @@ namespace GPF.Domain.Services
             string command =
                 CourseSelect() + $@"
                 INNER JOIN dbo.tblConcentrationCourse ctc ON crs.crs_id = ctc.crs_id
-                WHERE ctc.con_id = '{excludeConcentrationId}'
+                WHERE ctc.con_id <> '{excludeConcentrationId}'
                 ";
 
             DatabaseService service = new DatabaseService();
