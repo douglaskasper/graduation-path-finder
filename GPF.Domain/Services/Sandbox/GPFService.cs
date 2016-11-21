@@ -28,6 +28,8 @@ namespace GPF.Domain.Services.Sandbox
 
         public GPFSchedule GetSessionSchedule(GPFSession session)
         {
+            return null;
+            /**
             GPFSchedule schedule = new GPFSchedule(session, new List<Course>());
 
             ClassOffering classToSchedule = new ClassOffering();
@@ -105,6 +107,7 @@ namespace GPF.Domain.Services.Sandbox
             schedule.Terms.Find(x => x.Equals(classToSchedule.AcademicTerm)).ClassSchedule.Add(classToSchedule);
 
             return schedule;
+            */
         }
     }
 }
