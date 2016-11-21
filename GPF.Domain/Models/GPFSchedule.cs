@@ -73,7 +73,8 @@ namespace GPF.Domain.Models
             {
                 if (!isCourseTaken(pre)) return false;
             }
-            currentTerm.ClassSchedule.Add(course);
+            if (!isCourseTaken(course))
+                currentTerm.ClassSchedule.Add(course);
             toAdd.Remove(course);
             return true; //if it was able to add
         }
