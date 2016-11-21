@@ -9,9 +9,9 @@ namespace GPF.Domain.Models
         public AcademicTerm currentTerm;
         //List of courses already added, to check for prereqs of future courses
         public List<Course> coursesTaken;
-        public ClassOfferingService classService = new ClassOfferingService();
+        public CourseService cServ = new CourseService();
         List<Course> toAdd;
-        decimal hours;
+        decimal hours = 0;
 
         public GPFSchedule(GPFSession session, List<Course> courses, List<Course> taken)
         {
@@ -30,13 +30,13 @@ namespace GPF.Domain.Models
             int loopCount = 0;
             int termCount = 1;
             //variable to track position in toAdd
-            int listPos = -1;
+            int listPos = 0;
             //true when a class is successfully added
             bool classAdded = false;
             //course we're currently trying to add
             Course currentCourse;
             toAdd = courses;
-            while (toAdd.Count > 0 && termCount < 20)
+            while (toAdd.Count > 0)
             {
                 for (int i = 0; i < session.ClassesPerQuarter; i++)
                 {
@@ -52,16 +52,17 @@ namespace GPF.Domain.Models
                         currentCourse = toAdd[listPos];
                         classAdded = AddClass(currentCourse, currentTerm);
                     }
-
+                    if (toAdd.Count == 0) break;
                 }
                 Terms.Add(currentTerm);
+                foreach (Course c in currentTerm.ClassSchedule)
+                {
+                    AddCourseTaken(c);
+                }
                 currentTerm = currentTerm.nextTerm();
                 loopCount = 0;
                 termCount += 1;
-            }
-            if (hours < 48)
-            {
-                //more hours needed for degree, display this somewhere or add random classes
+                
             }
         }
 
@@ -70,9 +71,8 @@ namespace GPF.Domain.Models
             //check for prerequisites
             foreach (Course pre in course.Prerequisites)
             {
-                if (!coursesTaken.Contains(pre)) return false;
+                if (!isCourseTaken(pre)) return false;
             }
-            AddCourseTaken(course);
             currentTerm.ClassSchedule.Add(course);
             toAdd.Remove(course);
             return true; //if it was able to add
@@ -81,6 +81,16 @@ namespace GPF.Domain.Models
         public void AddCourseTaken(Course course)
         {
             coursesTaken.Add(course);
+        }
+
+        public bool isCourseTaken(Course other)
+        {
+            foreach (Course course in coursesTaken)
+            {
+                if (course.Id == other.Id)
+                    return true;
+            }
+            return false;
         }
     }
 }

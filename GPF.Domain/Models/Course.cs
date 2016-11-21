@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace GPF.Domain.Models
@@ -32,6 +31,15 @@ namespace GPF.Domain.Models
                 return this.Id.CompareTo(other.Id);
             else
                 throw new ArgumentException("Object is not a Course");
+        }
+
+        public bool isContainedBy(List<Course> other)
+        {
+            foreach (Course course in other)
+            {
+                if (course.Id == Id) return true;
+            }
+            return false;
         }
     }
 }

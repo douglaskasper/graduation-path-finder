@@ -162,7 +162,9 @@ namespace GPF.Domain.Services
 
         public GPFSchedule GetSessionSchedule(GPFSession session)
         {
-            
+            List<int> toTake = new List<int>();
+            List<int> missing = new List<int>();
+            decimal hours = 0;
             //add major courses based on session
             CourseService crsServ = new CourseService();
             List<Course> majorCourses = crsServ.GetCoursesRequiredByDegree(session.Degree.Id);
@@ -177,11 +179,83 @@ namespace GPF.Domain.Services
             foreach (Course course in courseids)
             {
                 courses.Add(crsServ.GetCoursesById(course.Id));
+                toTake.Add(course.Id);
+            }
+
+            //determine number of hours being taken
+            foreach (Course course in courses)
+            {
+                hours += course.Units;
+            }
+            //if less than 48 are being taken, add new concentration classes until at least 48 hours worth of classes are there
+            if (hours < 48)
+            {
+                int count = 0;
+                List<Course> extras = crsServ.GetCoursesByConcentration(session.Concentration.Id);
+                foreach(Course course in extras)
+                {
+                    course.Prerequisites = crsServ.GetCoursePrereqs(course.Id);
+                    if (course.Prerequisites == null)
+                    {
+                        course.Prerequisites = new List<Course>();
+                    }
+                }
+                while (hours < 48)
+                {
+                    if (!extras[count].isContainedBy(courses) && extras[count].Prerequisites.Count == 0)
+                    {
+                        courses.Add(extras[count]);
+                        toTake.Add(extras[count].Id);
+                        hours += extras[count].Units;
+                    }
+                    count++;
+                }
             }
             foreach (Course course in courses)
             {
                 course.Prerequisites = crsServ.GetCoursePrereqs(course.Id);
+                if (course.Prerequisites == null)
+                {
+                    course.Prerequisites = new List<Course>();
+                }
             }
+            //add any missing prereqs
+            foreach (Course course in courses)
+            {
+                foreach (Course pre in course.Prerequisites)
+                {
+                    if (!toTake.Contains(pre.Id))
+                    {
+                        missing.Add(pre.Id);
+                    }
+                }
+            }
+            while (missing.Count > 0)
+            {
+                foreach (int misId in missing.ToArray())
+                {
+                    Course toAdd = crsServ.GetCoursesById(misId);
+                    toAdd.Prerequisites = crsServ.GetCoursePrereqs(misId);
+                    if (toAdd.Prerequisites == null)
+                    {
+                        toAdd.Prerequisites = new List<Course>();
+                    }
+                    courses.Add(toAdd);
+                    toTake.Add(misId);
+                    missing.Remove(misId);
+                }
+                foreach (Course course in courses)
+                {
+                    foreach (Course pre in course.Prerequisites)
+                    {
+                        if (!toTake.Contains(pre.Id))
+                        {
+                            missing.Add(pre.Id);
+                        }
+                    }
+                }
+            }
+
             //sort courses using tree
             CourseTree tree = new CourseTree(courses);
             List<Course> sortedCourses = tree.GetList();
