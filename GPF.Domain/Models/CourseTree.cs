@@ -9,11 +9,12 @@ namespace GPF.Domain.Models
     public class CourseTree
     {
         public int Count;
+        int loops = 0;
         public CourseTreeNode Root;
         public CourseTreeNode Current;
+        List<Course> ListResult = new List<Course>();
         //Maintain index of courses by ID, removes need to search tree directly.
         public List<int> Courses = new List<int>();
-        private List<Course> ListResult = new List<Course>();
         public CourseTree(List<Course> requiredCourses)
         {
             Count = 0;
@@ -21,17 +22,19 @@ namespace GPF.Domain.Models
             SortedCourses.Sort();
 
             //add each course to the 'tree'
-            while (SortedCourses.Count > 0)
+            while (SortedCourses.Count > 0 && loops < 5)
             {
                 foreach (Course Course in SortedCourses.ToArray())
                 {
                     if (Course.Prerequisites.Count == 0 || ContainsAllCourses(Course.Prerequisites)) {
+                        ListResult.Add(Course);
                         AddNode(new CourseTreeNode(this, Course));
                         Count += 1;
                         Courses.Add(Course.Id);
                         SortedCourses.Remove(Course);
                     }
                 }
+                loops++;
             }
         }
         public bool ContainsCourse(Course Course)
@@ -80,11 +83,8 @@ namespace GPF.Domain.Models
         }
         public List<Course> GetList()
         {
-            foreach (CourseTreeNode Node in Root.Children)
-            {
-                GetListHelper(Node);
-            }
-            return this.ListResult;
+            
+            return ListResult;
         }
         private void GetListHelper(CourseTreeNode Node)
         {
