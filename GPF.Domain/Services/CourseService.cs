@@ -153,7 +153,7 @@ namespace GPF.Domain.Services
             {
                 command =
                     CourseSelect() + $@"
-                    INNER JOIN dbo.tblDegreeRequirement drq ON crs.crs_id = drq.deg_id
+                    INNER JOIN dbo.tblDegreeRequirement drq ON crs.crs_id = drq.crs_id
                     WHERE drq.deg_id = '{degreeId}'
                     ";
             }
@@ -161,7 +161,7 @@ namespace GPF.Domain.Services
             {
                 command =
                     CourseSelect() + $@"
-                    INNER JOIN dbo.tblDegreeRequirement drq ON crs.crs_id = drq.deg_id
+                    INNER JOIN dbo.tblDegreeRequirement drq ON crs.crs_id = drq.crs_id
                     ";
             }
 
@@ -182,7 +182,7 @@ namespace GPF.Domain.Services
             {
                 command =
                     CourseSelect() + $@"
-                    INNER JOIN dbo.tblConcentrationCourse ctc ON crs.crs_id = ctc.con_id
+                    INNER JOIN dbo.tblConcentrationCourse ctc ON crs.crs_id = ctc.crs_id
                     WHERE ctc.con_id = '{concentrationId}'
                     ";
             }
@@ -190,7 +190,7 @@ namespace GPF.Domain.Services
             {
                 command =
                     CourseSelect() + $@"
-                    INNER JOIN dbo.tblConcentrationCourse ctc ON crs.crs_id = ctc.con_id
+                    INNER JOIN dbo.tblConcentrationCourse ctc ON crs.crs_id = ctc.crs_id
                     ";
             }
 
@@ -207,7 +207,7 @@ namespace GPF.Domain.Services
         {
             string command =
                 CourseSelect() + $@"
-                INNER JOIN dbo.tblConcentrationCourse ctc ON crs.crs_id = ctc.con_id
+                INNER JOIN dbo.tblConcentrationCourse ctc ON crs.crs_id = ctc.crs_id
                 WHERE ctc.con_id = '{excludeConcentrationId}'
                 ";
 
