@@ -124,15 +124,15 @@ namespace GPF.Domain.Services
             {
                 command =
                     CourseSelect() + $@"
-                    INNER JOIN dbo.tblCoursePrerequisite prq ON crs.crs_id = prq.crs_id
-                    WHERE crs.crs_id = '{courseId}'
+                    INNER JOIN dbo.tblCoursePrerequisite prq ON crs.crs_id = prq.prq_id
+                    WHERE prq.crs_id = {courseId}
                     ";
             }
             else
             {
                 command =
                     CourseSelect() + $@"
-                    INNER JOIN dbo.tblCoursePrerequisite prq ON crs.crs_id = prq.crs_id
+                    INNER JOIN dbo.tblCoursePrerequisite prq ON crs.crs_id = prq.prq_id
                     ";
             }
 
@@ -208,7 +208,7 @@ namespace GPF.Domain.Services
             string command =
                 CourseSelect() + $@"
                 INNER JOIN dbo.tblConcentrationCourse ctc ON crs.crs_id = ctc.crs_id
-                WHERE ctc.con_id = '{excludeConcentrationId}'
+                WHERE ctc.con_id <> '{excludeConcentrationId}'
                 ";
 
             DatabaseService service = new DatabaseService();
