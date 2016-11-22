@@ -1,5 +1,5 @@
 # Graduation Path Finder 
-Graduation Path Finder Website, using .NET MVC 5 hosted on AWS Elastic Beanstalk.  Uses MS SQL Server database also hosted on AWS.
+Graduation Path Finder Website, using .NET MVC 5 hosted on AWS Elastic Beanstalk.  MS SQL Server database also hosted on AWS.
   
 This web app finds the fastest path to graduation at DePaul university.  The app allows for a number of decision variables to be set before calculating the path.  User accounts with demographics, path searching history, course history, roles (students, faculty, admins), etc. are included.  Elevated accounts can impersonate other accounts - updating data and performing actions on their behalf.  
 
